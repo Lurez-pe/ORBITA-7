@@ -32,4 +32,3 @@ Los JPG estudiantiles se copian a `public/assets/` para que Vite pueda servirlos
 ## Estado
 
 MVP en desarrollo: inicio, seis misiones, HUD, informe/continuar, resultados, reinicio, reservas de un uso, protocolo de bienestar y panel de consulta visual NASA. Balance de la matriz v2 aún provisional. La compilación de producción se verifica con `npm run build`.
-
