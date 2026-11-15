@@ -1,16 +1,25 @@
-import { initialResources } from '../data/missions.js';
+import { baseTurnConsumption, initialResources } from '../data/missions.js';
 
 const clamp = (n) => Math.max(0, Math.min(100, n));
 
 export function freshGame() {
   return {
     turn: 0,
-    phase: 'intro',
+    phase: 'intro', // 'intro' | 'play' | 'report' | 'result'
     resources: { ...initialResources },
-    flags: { waterReserveAvailable: true, oxygenReserveAvailable: true },
+    flags: {
+      var_comunicaciones: 0,
+      var_zona_aterrizaje: 0,
+      var_reparacion_base: 0,
+      var_paneles_limpios: 0,
+      var_modo_ahorro: 0,
+    },
+    decisionEffect: null,
+    baseConsumptionApplied: null,
     report: null,
-    reportChanges: null,
     history: [],
+    entryNotes: [],
+    resultReason: null,
   };
 }
 
@@ -20,95 +29,152 @@ export function startGame() {
 
 function applyEffects(resources, effects) {
   const next = { ...resources };
-  for (const [key, amount] of Object.entries(effects ?? {})) next[key] = clamp((next[key] ?? 0) + amount);
+  for (const [key, amount] of Object.entries(effects ?? {})) {
+    next[key] = clamp((next[key] ?? 0) + amount);
+  }
   return next;
 }
 
 export function chooseOption(game, mission, option) {
-  if ((option.needsReserve === 'water' && !game.flags.waterReserveAvailable)
-    || (option.needsReserve === 'oxygen' && !game.flags.oxygenReserveAvailable)) return game;
-  const before = game.resources;
-  let resources = applyEffects(before, option.effects);
+  const before = { ...game.resources };
+  const resourcesAfterDecision = applyEffects(before, option.effects);
+
   const flags = {
     ...game.flags,
-    [option.flag]: true,
-    ...(option.needsReserve === 'water' ? { waterReserveAvailable: false } : {}),
-    ...(option.needsReserve === 'oxygen' ? { oxygenReserveAvailable: false } : {}),
+    ...(option.flag ? { [option.flag]: option.flagValue ?? 1 } : {}),
   };
-  const teamworkCost = option.teamwork && before.morale < 60 ? 5 : 0;
-  if (teamworkCost) resources = applyEffects(resources, { energy: -teamworkCost });
-  const changes = Object.fromEntries(Object.keys(resources).map((key) => [key, resources[key] - before[key]]));
+
+  // Special dualGuidance handling for Mission 6 Option C
+  if (option.flag === 'dualGuidance') {
+    flags.var_comunicaciones = 1;
+    flags.var_zona_aterrizaje = 1;
+  }
+
+  const decisionDelta = Object.fromEntries(
+    Object.keys(resourcesAfterDecision).map((key) => [
+      key,
+      resourcesAfterDecision[key] - before[key],
+    ])
+  );
+
   return {
     ...game,
-    resources,
+    resources: resourcesAfterDecision,
     flags,
     phase: 'report',
+    decisionEffect: decisionDelta,
     report: {
       missionId: mission.id,
       optionId: option.id,
       title: option.title,
       outcome: option.outcome,
       lesson: option.lesson,
-      teamworkCost,
     },
-    reportChanges: changes,
-    history: [...game.history, { missionId: mission.id, optionId: option.id, title: option.title }],
+    history: [
+      ...game.history,
+      {
+        missionId: mission.id,
+        optionId: option.id,
+        title: option.title,
+        effects: option.effects,
+      },
+    ],
   };
-}
-
-export function useWellbeingProtocol(game) {
-  if (game.flags.wellbeingUsed) return game;
-  return {
-    ...game,
-    resources: applyEffects(game.resources, { morale: 10 }),
-    flags: { ...game.flags, wellbeingUsed: true },
-  };
-}
-
-function applyTurnEntry(game, nextTurn) {
-  let resources = game.resources;
-  const flags = game.flags;
-  let entryNotes = [];
-  if (nextTurn === 1 && flags.savingMode) entryNotes.push('El modo de ahorro limita temporalmente el invernadero y la producción de alimentos.');
-  if (nextTurn === 2) {
-    if (flags.panelsInspected || flags.panelsCleaned) {
-      const bonus = flags.panelsInspected ? 8 : 5;
-      resources = applyEffects(resources, { energy: bonus });
-      entryNotes.push(`Los paneles recuperan +${bonus} de Energía.`);
-    }
-  }
-  if (nextTurn === 4 && flags.irrigationReduced) entryNotes.push('El riego reducido deja menos margen para el cultivo.');
-  // nextTurn is a zero-based mission index: 4 is mission 5 (fuga).
-  if (nextTurn === 4) {
-    resources = applyEffects(resources, { protection: -20, life: -5, ...(flags.loadsReduced ? { energy: 5 } : {}) });
-    entryNotes.push('El daño de la fuga reduce Protección −20 y Soporte vital −5.');
-    if (flags.loadsReduced) entryNotes.push('Las cargas secundarias apagadas aportan +5 de Energía.');
-  }
-  if (nextTurn === 5 && flags.temporarySeal) entryNotes.push('Revisa el sellado temporal antes de la llegada.');
-  return { ...game, resources, flags, entryNotes };
 }
 
 export function continueAfterReport(game, missionCount) {
-  let resources = applyEffects(game.resources, { energy: -5, life: -5 });
-  const closedTurn = { ...game, resources };
+  // Step 5 of GDD: Apply base turn consumption (Energía -5, Soporte -3, Suministros -4)
+  const beforeConsumption = { ...game.resources };
+  const resourcesAfterBase = applyEffects(beforeConsumption, baseTurnConsumption);
+
+  const consumptionDelta = Object.fromEntries(
+    Object.keys(resourcesAfterBase).map((key) => [
+      key,
+      resourcesAfterBase[key] - beforeConsumption[key],
+    ])
+  );
+
+  // Step 6 of GDD: Check if any indicator reached 0 (Emergency Defeat)
+  for (const [key, val] of Object.entries(resourcesAfterBase)) {
+    if (val <= 0) {
+      return {
+        ...game,
+        resources: resourcesAfterBase,
+        phase: 'result',
+        result: 'finalD',
+        resultReason: key,
+        baseConsumptionApplied: consumptionDelta,
+      };
+    }
+  }
+
   const nextTurn = game.turn + 1;
-  if (resources.life <= 0 || (resources.protection <= 0 && !(game.flags.moduleIsolated || game.flags.finalRepair))) {
-    return { ...closedTurn, phase: 'result', result: 'failure', turn: game.turn, entryNotes: [] };
-  }
+
+  // Final check at the end of turn 6 (all 6 missions completed)
   if (nextTurn >= missionCount) {
-    const contained = game.flags.moduleIsolated || game.flags.finalRepair || game.flags.temporarySeal;
-    const success = resources.life >= 40 && (resources.protection >= 40 || contained) && game.flags.siteInspected && (game.flags.communications || game.flags.beacon);
-    const partial = resources.life >= 20 && contained && (game.flags.siteInspected || game.flags.communications || game.flags.beacon);
-    return { ...closedTurn, phase: 'result', result: success ? 'success' : partial ? 'partial' : 'risk', turn: game.turn, entryNotes: [] };
+    const flags = game.flags;
+    const { energy, life, supplies, safety } = resourcesAfterBase;
+
+    let endingType = 'finalC'; // default: vessel remains in orbit
+
+    const commsOk = flags.var_comunicaciones === 1;
+    const landingOk = flags.var_zona_aterrizaje === 1;
+    const baseRepaired = flags.var_reparacion_base === 1;
+
+    if (commsOk && landingOk && baseRepaired) {
+      endingType = 'finalA'; // Safe touchdown
+    } else if (commsOk && landingOk) {
+      endingType = 'finalB'; // Survival with limited reserves
+    } else {
+      endingType = 'finalC'; // Vessel remains in orbit
+    }
+
+    return {
+      ...game,
+      resources: resourcesAfterBase,
+      phase: 'result',
+      result: endingType,
+      baseConsumptionApplied: consumptionDelta,
+    };
   }
-  const advanced = applyTurnEntry({ ...closedTurn, turn: nextTurn, phase: 'play', report: null, reportChanges: null }, nextTurn);
-  return { ...advanced, entryNotes: advanced.entryNotes ?? [] };
+
+  // Turn entry bonuses and consequences
+  const entryNotes = [];
+  let updatedResources = { ...resourcesAfterBase };
+
+  // If panels were cleaned in Mission 1, recover solar power in subsequent turns
+  if (nextTurn === 1 && game.flags.var_paneles_limpios === 1) {
+    updatedResources = applyEffects(updatedResources, { energy: 6 });
+    entryNotes.push('Cleaned photovoltaic panels restore +6 Energy as storm clearing begins.');
+  }
+
+  if (nextTurn === 1 && game.flags.var_modo_ahorro === 1) {
+    entryNotes.push('Power-saving mode active: non-essential research postponed.');
+  }
+
+  return {
+    ...game,
+    turn: nextTurn,
+    phase: 'play',
+    resources: updatedResources,
+    report: null,
+    decisionEffect: null,
+    baseConsumptionApplied: consumptionDelta,
+    entryNotes,
+  };
 }
 
-export function resourceStatus(value) {
-  if (value >= 80) return 'Óptimo';
-  if (value >= 60) return 'Estable';
-  if (value >= 40) return 'Bajo';
-  if (value >= 20) return 'Crítico';
-  return 'Emergencia';
+export function resourceStatus(value, lang = 'en') {
+  if (lang === 'es') {
+    if (value >= 80) return 'ÓPTIMO';
+    if (value >= 60) return 'ESTABLE';
+    if (value >= 40) return 'PRECAUCIÓN';
+    if (value >= 20) return 'CRÍTICO';
+    return 'EMERGENCIA';
+  }
+  if (value >= 80) return 'OPTIMAL';
+  if (value >= 60) return 'STABLE';
+  if (value >= 40) return 'CAUTION';
+  if (value >= 20) return 'CRITICAL';
+  return 'EMERGENCY';
 }
