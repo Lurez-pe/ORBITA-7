@@ -52,11 +52,18 @@ const actionFeedback = {
   beacon: ['ACTIVANDO BALIZA', 'BALIZA EMITIENDO SEÑAL'],
 };
 
-function ActionCue({ option, complete }) {
+function ActionCue({ option, complete, stage, onSkip }) {
   const [working, done] = actionFeedback[option.flag] ?? [option.title.toUpperCase(), 'ACCIÓN COMPLETADA'];
+  const missionOneStages = {
+    dispatch: 'ROVER SALIENDO DE LA BASE',
+    operation: option.flag === 'panelsCleaned' ? 'RETIRANDO EL POLVO DE LOS PANELES' : option.flag === 'panelsInspected' ? 'ESCÁNER RECORRIENDO LOS PANELES' : 'DESACTIVANDO CARGAS NO ESENCIALES',
+    return: option.flag === 'panelsCleaned' ? 'GENERACIÓN SOLAR EN RECUPERACIÓN' : option.flag === 'panelsInspected' ? 'DATOS DEL ESCANEO RECIBIDOS' : 'SISTEMAS ESENCIALES ESTABILIZADOS',
+  };
+  const label = option.missionId === 1 && !complete ? missionOneStages[stage] ?? working : complete ? done : working;
   return <div className={`action-cue${complete ? ' action-cue--complete' : ''}`} role="status" aria-live="polite">
-    <div className="action-cue__label"><i />{complete ? done : working}</div>
+    <div className="action-cue__label"><i />{label}</div>
     {!complete && <div className="action-cue__bar"><span /></div>}
+    {!complete && onSkip && <button className="action-cue__skip" onClick={onSkip}>OMITIR ANIMACIÓN <span>»</span></button>}
   </div>;
 }
 
@@ -181,12 +188,15 @@ function Scene({ mission, game, effect, actionPhase }) {
     <div className="playfield__vignette" />
     <div className="playfield__stars" aria-hidden="true" />
     <div className="playfield__planet" aria-hidden="true" />
+    {mission.id === 1 && <div className="playfield__storm-gusts" aria-hidden="true"><i /><i /><i /></div>}
     <div className="playfield__dust" aria-hidden="true">
       {Array.from({ length: dustCount }, (_, i) => <i key={i} style={{ '--dust-index': i, '--dust-left': `${(i * 41) % 100}%` }} />)}
     </div>
     <div className="playfield__horizon" aria-hidden="true" />
     <div className="playfield__base-light" aria-hidden="true"><i /><i /><i /></div>
-    {sceneAssets.prop && <img className={`scene-prop scene-prop--${mission.id}`} src={sceneAssets.prop} alt={sceneAssets.propAlt} />}
+    {sceneAssets.prop && (mission.id === 1
+      ? <div className="scene-panels"><img className="scene-prop" src={sceneAssets.prop} alt={sceneAssets.propAlt} /><i className="scene-panels__dust" /><i className="scene-panels__scan" /></div>
+      : <img className={`scene-prop scene-prop--${mission.id}`} src={sceneAssets.prop} alt={sceneAssets.propAlt} />)}
     <img className="scene-rover" src="/assets/ORB_OBJ_rover_lateral_v01.png" alt="Rover de la base" />
     <div className="scene-crew">
       <div className="scene-crew__sprites"><img src="/assets/ORB_PERS_tripulante_naranja.webp" alt="Tripulante con parche naranja" /><img src="/assets/ORB_PERS_tripulante_antena.webp" alt="Tripulante con antena" /><img src="/assets/ORB_PERS_tripulante_lider.webp" alt="Tripulante de traje blanco" /><img src="/assets/ORB_PERS_tripulante_cientifico.webp" alt="Tripulante especialista" /></div>
@@ -245,18 +255,19 @@ export default function App() {
   const [paused, setPaused] = useState(false);
   const [motionReduced, setMotionReduced] = useState(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false);
   const [actionSequence, setActionSequence] = useState(null);
-  const actionTimer = useRef(null);
+  const actionTimers = useRef([]);
   const mission = missions[game.turn] ?? missions[0];
   const selectedOption = mission.options.find((option) => option.id === game.report?.optionId);
   const totalDelta = game.reportChanges ?? {};
 
   const toggleMotion = () => setMotionReduced((current) => !current);
-  useEffect(() => () => window.clearTimeout(actionTimer.current), []);
+  useEffect(() => () => actionTimers.current.forEach(window.clearTimeout), []);
   if (game.phase === 'intro') return <Intro motionReduced={motionReduced} onToggleMotion={toggleMotion} onStart={() => { setPaused(false); setGame(startGame()); }} />;
   if (game.phase === 'result') return <ResultScreen game={game} onRestart={() => setGame(freshGame())} />;
 
   function advance() {
-    window.clearTimeout(actionTimer.current);
+    actionTimers.current.forEach(window.clearTimeout);
+    actionTimers.current = [];
     setActionSequence(null);
     setGame((current) => continueAfterReport(current, missions.length));
   }
@@ -267,12 +278,26 @@ export default function App() {
       setGame((current) => chooseOption(current, mission, option));
       return;
     }
-    setActionSequence({ missionId: mission.id, option, phase: 'working' });
-    actionTimer.current = window.setTimeout(() => {
+    const selected = { ...option, missionId: mission.id };
+    setActionSequence({ missionId: mission.id, option: selected, phase: 'working', stage: 'dispatch' });
+    const actionDuration = mission.id === 1 ? 5200 : 1450;
+    if (mission.id === 1) {
+      actionTimers.current.push(window.setTimeout(() => setActionSequence((current) => current && ({ ...current, stage: 'operation' })), 1700));
+      actionTimers.current.push(window.setTimeout(() => setActionSequence((current) => current && ({ ...current, stage: 'return' })), 3800));
+    }
+    actionTimers.current.push(window.setTimeout(() => {
       setGame((current) => chooseOption(current, mission, option));
-      setActionSequence({ missionId: mission.id, option, phase: 'complete' });
-      actionTimer.current = window.setTimeout(() => setActionSequence(null), 2200);
-    }, 1450);
+      setActionSequence({ missionId: mission.id, option: selected, phase: 'complete' });
+      actionTimers.current = [window.setTimeout(() => setActionSequence(null), 2200)];
+    }, actionDuration));
+  }
+
+  function skipAction() {
+    if (!actionSequence) return;
+    actionTimers.current.forEach(window.clearTimeout);
+    actionTimers.current = [];
+    setGame((current) => chooseOption(current, mission, actionSequence.option));
+    setActionSequence(null);
   }
 
   return <main className={`game-screen${motionReduced ? ' is-motion-reduced' : ''}${paused ? ' is-paused' : ''}`}>
@@ -294,6 +319,7 @@ export default function App() {
       <section className={`mission-column mission-column--${game.phase}`} data-effect={actionSequence?.option.flag ?? selectedOption?.flag ?? ''}>
         <div className="game-stage" key={mission.id}>
           <Scene mission={mission} game={game} effect={actionSequence?.option.flag ?? selectedOption?.flag} actionPhase={actionSequence?.phase} />
+          {actionSequence?.missionId === mission.id && <ActionCue option={actionSequence.option} complete={actionSequence.phase === 'complete'} stage={actionSequence.stage} onSkip={actionSequence.phase === 'working' ? skipAction : null} />}
           <section className={`dialogue-dock dialogue-dock--${game.phase}`}>
             <div className="dialogue-dock__speaker"><StarBadge /><span className="eyebrow">{game.phase === 'report' ? 'REPORTE DE OPERACIONES' : 'CANAL DE MISIÓN · S.T.A.R.'}</span></div>
             {game.phase === 'play' ? <>
@@ -308,7 +334,6 @@ export default function App() {
                 </button>;
               })}</div>
               {game.entryNotes?.map((note) => <p className="entry-note" key={note}>↳ {note}</p>)}
-              {actionSequence?.missionId === mission.id && <ActionCue option={actionSequence.option} complete={actionSequence.phase === 'complete'} />}
             </> : <>
               <p className="dialogue-dock__line">{game.report.outcome}</p>
               <p className="dialogue-dock__lesson"><span>LECCIÓN DE LA MISIÓN</span>{game.report.lesson}</p>
