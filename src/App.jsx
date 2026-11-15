@@ -160,7 +160,7 @@ function Scene({ mission, game, effect }) {
     {sceneAssets.prop && <img className={`scene-prop scene-prop--${mission.id}`} src={sceneAssets.prop} alt={sceneAssets.propAlt} />}
     <img className="scene-rover" src="/assets/ORB_OBJ_rover_lateral_v01.png" alt="Rover de la base" />
     <div className="scene-crew">
-      <div className="scene-crew__sprites"><img src="/assets/ORB_PERS_tripulante_naranja.webp" alt="Tripulante con parche naranja" /><img src="/assets/ORB_PERS_tripulante_antena.webp" alt="Tripulante con antena" /></div>
+      <div className="scene-crew__sprites"><img src="/assets/ORB_PERS_tripulante_naranja.webp" alt="Tripulante con parche naranja" /><img src="/assets/ORB_PERS_tripulante_antena.webp" alt="Tripulante con antena" /><img src="/assets/ORB_PERS_tripulante_lider.webp" alt="Tripulante de traje blanco" /><img src="/assets/ORB_PERS_tripulante_cientifico.webp" alt="Tripulante especialista" /></div>
       <span>TRIPULACIÓN · 4</span>
     </div>
     {mission.id === 6 && <div className="scene-map"><img src="/assets/ORB_MAP_alpha7.webp" alt="Mapa cenital de la base Alpha-7" /><span>MAPA DE ZONA · ALPHA-7</span><i /></div>}
