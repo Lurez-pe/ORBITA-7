@@ -130,6 +130,27 @@
 .scene-beacon{position:absolute;z-index:3;right:8%;bottom:39%;width:clamp(28px,4vw,48px);height:auto;max-height:12%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 0 0 #55d6c2)}
 .scene-beacon--active{animation:beacon-pop .5s ease both;filter:drop-shadow(0 0 12px #55d6c2)}
 .mission-column[data-effect="communications"] .scene-beacon{animation:beacon-pop .5s ease both,signal-pulse .7s ease-in-out infinite alternate;filter:drop-shadow(0 0 13px #55d6c2)}
+
+/* Action beat: the scene reacts before the mission report appears. */
+.action-cue{position:absolute;z-index:8;left:50%;top:clamp(180px,34%,310px);width:min(350px,70%);padding:13px 16px;transform:translateX(-50%);border:1px solid #55d6c2a8;background:#0b1024e8;box-shadow:0 0 0 4px #101329aa,0 12px 32px #03040a99;color:#e6fff9;text-align:center;animation:cue-enter .3s cubic-bezier(.18,.82,.22,1) both}
+.action-cue__label{display:flex;align-items:center;justify-content:center;gap:9px;font:700 9px 'DM Mono',monospace;letter-spacing:.12em}
+.action-cue__label i{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:cue-ping .8s ease-in-out infinite alternate}
+.action-cue__bar{height:3px;margin-top:12px;overflow:hidden;background:#ffffff20}
+.action-cue__bar span{display:block;width:35%;height:100%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:cue-progress 1.4s ease-in-out both}
+.action-cue--complete{border-color:#a8f3bf;color:#c5ffd1;animation:cue-enter .3s ease both,confirmation-pop 2.2s ease 1.7s both}
+.action-cue--complete .action-cue__label i{background:#a8f3bf;box-shadow:0 0 12px #a8f3bf;animation:none}
+.game-screen .choice-card:disabled{cursor:wait}
+.game-screen .exit-button:disabled{opacity:.5;cursor:wait}
+.mission-column[data-effect="extractorRepaired"] .scene-prop--2,.mission-column[data-effect="oxygenRepaired"] .scene-prop--4,.mission-column[data-effect="finalRepair"] .scene-prop{animation:repair-burst .8s ease-in-out 2}
+.mission-column[data-effect="crewSheltered"] .scene-crew{animation:crew-shelter .8s cubic-bezier(.2,.75,.35,1) 2 alternate}
+.mission-column[data-effect="temporarySeal"] .scene-prop,.mission-column[data-effect="moduleIsolated"] .scene-prop--4{animation:seal-impact .65s ease-in-out 2}
+@keyframes cue-enter{from{opacity:0;transform:translate(-50%,10px) scale(.96)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes cue-ping{from{opacity:.4;transform:scale(.75)}to{opacity:1;transform:scale(1.2)}}
+@keyframes cue-progress{from{transform:translateX(-110%)}to{transform:translateX(300%)}}
+@keyframes repair-burst{0%,100%{filter:drop-shadow(0 9px 10px #080b1a77) brightness(1)}50%{filter:drop-shadow(0 0 18px #55d6c2) brightness(1.7);transform:translateY(-8px) scale(1.06)}}
+@keyframes crew-shelter{to{transform:translateX(30px) scale(.94);opacity:.78}}
+@keyframes seal-impact{0%,100%{transform:translateY(0)}35%{transform:translateY(-10px) rotate(-2deg)}70%{transform:translateY(2px) rotate(1deg)}}
+@media(prefers-reduced-motion:reduce){.action-cue,.action-cue__label i,.action-cue__bar span,.scene-prop,.scene-crew{animation:none!important}}
 .scene-supply-ship{position:absolute;z-index:2;top:26%;right:-18%;width:clamp(130px,18vw,235px);height:auto;object-fit:contain;opacity:0;image-rendering:pixelated;filter:drop-shadow(0 0 14px #f4d36c77)}
 .scene-supply-ship--visible{opacity:1;animation:supply-arrive 13s ease-in-out infinite alternate}
 .mission-alert-emblem{position:absolute;z-index:3;right:clamp(22px,4vw,58px);top:clamp(90px,16vh,154px);width:clamp(45px,6vw,73px);aspect-ratio:1;background-size:345% 305%;background-position:center 39%;border:2px solid #ffb14c;border-radius:3px;box-shadow:0 0 0 4px #100e27bb,0 0 20px #ff9e3455;image-rendering:pixelated;animation:alert-pop .55s cubic-bezier(.18,.82,.22,1) both}
@@ -172,3 +193,4 @@
 @media(max-width:900px){.scene-prop--1{left:32%;bottom:42%}.scene-prop--2{left:48%;bottom:42%}.scene-prop--3{left:32%;bottom:41%}.scene-prop--4{left:35%;bottom:42%}.scene-prop--5{left:32%;bottom:42%}.scene-rover{bottom:42%}.scene-crew{bottom:40%}.scene-map{top:108px;right:12px;width:145px}.scene-supply-ship{top:30%}.mission-alert-emblem{top:160px}}
 @media(max-width:620px){.intro-art--menu{height:auto;padding:4px}.intro-art--menu .art-scan{inset:4px}.menu-hotspots{inset:4px}.menu-hotspot{font-size:6px}.menu-hotspot span{left:0;padding:3px 4px}.menu-modal,.pause-console{min-height:unset;aspect-ratio:16/10}.menu-modal__content,.pause-console__controls{padding:15px}.menu-modal__content h2,.pause-console__controls h2{font-size:25px;margin:5px 0 10px}.source-list{grid-template-columns:1fr;gap:5px;max-height:32vh;overflow:auto}.source-list a{font-size:7px}.scene-prop--1{left:36%;bottom:43%;width:87px}.scene-prop--2{left:49%;bottom:43%;width:80px}.scene-prop--3{left:33%;bottom:42%;width:70px}.scene-prop--4{left:37%;bottom:43%;width:90px}.scene-prop--5{left:34%;bottom:43%;width:75px}.scene-rover{width:88px;left:1%;bottom:44%}.scene-crew{right:5%;bottom:43%;width:115px}.scene-crew__sprites{height:95px}.scene-map{top:106px;right:8px;width:108px}.scene-map span{font-size:5px}.scene-supply-ship{top:31%;width:118px}.mission-alert-emblem{top:148px;right:14px;width:42px}.scene-beacon{bottom:44%;width:24px}}
 @media(prefers-reduced-motion:reduce){.scene-prop,.scene-supply-ship--visible,.mission-alert-emblem,.menu-overlay,.pause-overlay,.menu-modal,.pause-console{animation:none!important;transition:none!important}}
+
