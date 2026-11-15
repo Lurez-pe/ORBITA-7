@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { missions, nasaSources, resourceMeta } from './data/missions.js';
 import {
   chooseOption,
@@ -28,6 +28,35 @@ function ResourceGauge({ name, value }) {
 function StarBadge() {
   return <div className="star-badge" aria-label="S.T.A.R., asistente de operaciones">
     <span>✦</span><b>S.T.A.R.</b><small>ASISTENTE</small>
+  </div>;
+}
+
+const actionFeedback = {
+  panelsCleaned: ['ROVER EN RUTA A LOS PANELES', 'PANELES DESPEJADOS'],
+  panelsInspected: ['ESCANEO DE PANELES EN CURSO', 'INSPECCIÓN COMPLETADA'],
+  savingMode: ['DESACTIVANDO CARGAS NO ESENCIALES', 'MODO DE AHORRO ACTIVO'],
+  extractorRepaired: ['REPARANDO EL EXTRACTOR', 'EXTRACTOR EN FUNCIONAMIENTO'],
+  irrigationReduced: ['AJUSTANDO EL RIEGO', 'RIEGO PRIORIZADO'],
+  lowWaterReserve: ['ABRIENDO RESERVA DE AGUA', 'RESERVA DE AGUA UTILIZADA'],
+  crewSheltered: ['TRIPULACIÓN: AL REFUGIO', 'EQUIPO RESGUARDADO'],
+  shelterReinforced: ['REFORZANDO EL REFUGIO', 'BLINDAJE REFORZADO'],
+  radiationRisk: ['ALERTA DE RADIACIÓN ACTIVA', 'OPERACIÓN EXTERIOR REGISTRADA'],
+  oxygenRepaired: ['REPARANDO MÓDULO DE OXÍGENO', 'MÓDULO DE OXÍGENO ESTABLE'],
+  lowOxygenReserve: ['CONECTANDO RESERVA DE OXÍGENO', 'RESERVA DE OXÍGENO UTILIZADA'],
+  loadsReduced: ['APAGANDO CARGAS SECUNDARIAS', 'SISTEMAS ESENCIALES PRIORIZADOS'],
+  moduleIsolated: ['SELLANDO ACCESOS DEL MÓDULO', 'MÓDULO AISLADO'],
+  finalRepair: ['EQUIPO DE REPARACIÓN EN RUTA', 'REPARACIÓN ESTRUCTURAL COMPLETADA'],
+  temporarySeal: ['APLICANDO SELLADO TEMPORAL', 'FUGA CONTENIDA POR AHORA'],
+  communications: ['REINICIANDO ANTENA', 'ANTENA ENVIANDO SEÑAL'],
+  siteInspected: ['ROVER ESCANEANDO LA ZONA', 'ZONA DE ATERRIZAJE ESCANEADA'],
+  beacon: ['ACTIVANDO BALIZA', 'BALIZA EMITIENDO SEÑAL'],
+};
+
+function ActionCue({ option, complete }) {
+  const [working, done] = actionFeedback[option.flag] ?? [option.title.toUpperCase(), 'ACCIÓN COMPLETADA'];
+  return <div className={`action-cue${complete ? ' action-cue--complete' : ''}`} role="status" aria-live="polite">
+    <div className="action-cue__label"><i />{complete ? done : working}</div>
+    {!complete && <div className="action-cue__bar"><span /></div>}
   </div>;
 }
 
@@ -132,7 +161,7 @@ function Intro({ onStart, motionReduced, onToggleMotion }) {
   </main>;
 }
 
-function Scene({ mission, game, effect }) {
+function Scene({ mission, game, effect, actionPhase }) {
   const dustCount = 18;
   const sceneAssets = {
     1: { background: '/assets/ORB_ESC_base_exterior_v01.jpg', prop: '/assets/ORB_OBJ_panel_solar_v01.png', propAlt: 'Panel solar' },
@@ -147,7 +176,7 @@ function Scene({ mission, game, effect }) {
     ? '/assets/orbita7_alerta_tormenta_de_polvo_v3.png'
     : mission.id === 3 ? '/assets/orbita7_alerta_radiacion.png' : null;
   const beaconActive = effect === 'beacon' || game.flags.beacon;
-  return <div className={`playfield playfield--mission-${mission.id}${interior ? ' playfield--interior' : ''}`}>
+  return <div className={`playfield playfield--mission-${mission.id}${interior ? ' playfield--interior' : ''}${actionPhase ? ` playfield--action-${actionPhase}` : ''}`}>
     <img className="playfield__landscape" src={sceneAssets.background} alt="" aria-hidden="true" />
     <div className="playfield__vignette" />
     <div className="playfield__stars" aria-hidden="true" />
@@ -215,42 +244,63 @@ export default function App() {
   const [game, setGame] = useState(freshGame);
   const [paused, setPaused] = useState(false);
   const [motionReduced, setMotionReduced] = useState(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false);
+  const [actionSequence, setActionSequence] = useState(null);
+  const actionTimer = useRef(null);
   const mission = missions[game.turn] ?? missions[0];
   const selectedOption = mission.options.find((option) => option.id === game.report?.optionId);
   const totalDelta = game.reportChanges ?? {};
 
   const toggleMotion = () => setMotionReduced((current) => !current);
+  useEffect(() => () => window.clearTimeout(actionTimer.current), []);
   if (game.phase === 'intro') return <Intro motionReduced={motionReduced} onToggleMotion={toggleMotion} onStart={() => { setPaused(false); setGame(startGame()); }} />;
   if (game.phase === 'result') return <ResultScreen game={game} onRestart={() => setGame(freshGame())} />;
 
-  function advance() { setGame((current) => continueAfterReport(current, missions.length)); }
+  function advance() {
+    window.clearTimeout(actionTimer.current);
+    setActionSequence(null);
+    setGame((current) => continueAfterReport(current, missions.length));
+  }
+
+  function performAction(option) {
+    if (actionSequence) return;
+    if (motionReduced) {
+      setGame((current) => chooseOption(current, mission, option));
+      return;
+    }
+    setActionSequence({ missionId: mission.id, option, phase: 'working' });
+    actionTimer.current = window.setTimeout(() => {
+      setGame((current) => chooseOption(current, mission, option));
+      setActionSequence({ missionId: mission.id, option, phase: 'complete' });
+      actionTimer.current = window.setTimeout(() => setActionSequence(null), 2200);
+    }, 1450);
+  }
 
   return <main className={`game-screen${motionReduced ? ' is-motion-reduced' : ''}${paused ? ' is-paused' : ''}`}>
     <header className="game-topbar">
       <a className="brand" href="#top" onClick={(event) => event.preventDefault()}><span className="brand-mark">O7</span><span>ORBITA-7<small>FLIGHT OPERATIONS</small></span></a>
       <div className="mission-clock"><span className="live-dot" /> TIEMPO MARCIANO <b>{mission.time}</b></div>
-      <button className="exit-button" onClick={() => setPaused(true)}>Pausar misión <span>Ⅱ</span></button>
+      <button className="exit-button" disabled={Boolean(actionSequence?.phase === 'working')} onClick={() => setPaused(true)}>Pausar misión <span>Ⅱ</span></button>
     </header>
 
     <section className="game-shell">
       <div className="command-rail">
         <div className="command-rail__label"><span className="eyebrow">ESTADO DE LA BASE</span><span className="signal-status"><i /> SISTEMAS ACTIVOS</span></div>
         <div className="resource-ribbon">{Object.entries(game.resources).map(([key, value]) => <ResourceGauge key={key} name={key} value={value} />)}</div>
-        <button className="wellbeing-button" disabled={game.flags.wellbeingUsed} onClick={() => setGame((current) => useWellbeingProtocol(current))}>
+        <button className="wellbeing-button" disabled={game.flags.wellbeingUsed || Boolean(actionSequence)} onClick={() => setGame((current) => useWellbeingProtocol(current))}>
           <span>✦</span>{game.flags.wellbeingUsed ? 'Protocolo usado' : 'Bienestar +10'}
         </button>
       </div>
 
-      <section className={`mission-column mission-column--${game.phase}`} data-effect={selectedOption?.flag ?? ''}>
+      <section className={`mission-column mission-column--${game.phase}`} data-effect={actionSequence?.option.flag ?? selectedOption?.flag ?? ''}>
         <div className="game-stage" key={mission.id}>
-          <Scene mission={mission} game={game} effect={selectedOption?.flag} />
+          <Scene mission={mission} game={game} effect={actionSequence?.option.flag ?? selectedOption?.flag} actionPhase={actionSequence?.phase} />
           <section className={`dialogue-dock dialogue-dock--${game.phase}`}>
             <div className="dialogue-dock__speaker"><StarBadge /><span className="eyebrow">{game.phase === 'report' ? 'REPORTE DE OPERACIONES' : 'CANAL DE MISIÓN · S.T.A.R.'}</span></div>
             {game.phase === 'play' ? <>
               <p className="dialogue-dock__line">{mission.alert}</p>
               <div className="choice-list">{mission.options.map((option) => {
                 const reserveAvailable = option.needsReserve === 'water' ? game.flags.waterReserveAvailable : option.needsReserve === 'oxygen' ? game.flags.oxygenReserveAvailable : true;
-                return <button className={`choice-card${reserveAvailable ? '' : ' choice-card--disabled'}`} key={option.id} disabled={!reserveAvailable} onClick={() => setGame((current) => chooseOption(current, mission, option))}>
+                return <button className={`choice-card${reserveAvailable ? '' : ' choice-card--disabled'}`} key={option.id} disabled={!reserveAvailable || Boolean(actionSequence)} onClick={() => performAction(option)}>
                   <span className="choice-key">{option.id}</span>
                   <span className="choice-text"><b>{option.title}</b><small>{reserveAvailable ? option.detail : 'Reserva agotada'}</small></span>
                   <span className="choice-effects">{Object.entries(option.effects).map(([key, value]) => <i key={key} className={value >= 0 ? 'gain' : 'loss'}>{resourceMeta[key].short} {value > 0 ? '+' : ''}{value}</i>)}{option.teamwork && <i className="cost-note">−5 ENE* si ánimo &lt;60</i>}</span>
@@ -258,6 +308,7 @@ export default function App() {
                 </button>;
               })}</div>
               {game.entryNotes?.map((note) => <p className="entry-note" key={note}>↳ {note}</p>)}
+              {actionSequence?.missionId === mission.id && <ActionCue option={actionSequence.option} complete={actionSequence.phase === 'complete'} />}
             </> : <>
               <p className="dialogue-dock__line">{game.report.outcome}</p>
               <p className="dialogue-dock__lesson"><span>LECCIÓN DE LA MISIÓN</span>{game.report.lesson}</p>
@@ -280,3 +331,4 @@ export default function App() {
     {paused && <PauseOverlay onResume={() => setPaused(false)} onMenu={() => { setPaused(false); setGame(freshGame()); }} motionReduced={motionReduced} onToggleMotion={toggleMotion} />}
   </main>;
 }
+
