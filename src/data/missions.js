@@ -6,10 +6,10 @@ export const initialResources = {
 };
 
 export const resourceMeta = {
-  energy: { label: 'Energía', short: 'ENE', icon: 'ϟ', color: 'energy' },
-  life: { label: 'Soporte vital', short: 'SOP', icon: '◉', color: 'life' },
-  protection: { label: 'Protección', short: 'PRO', icon: '⬡', color: 'protection' },
-  morale: { label: 'Ánimo', short: 'ANI', icon: '✦', color: 'morale' },
+  energy: { label: 'Energía', short: 'ENE', icon: 'ϟ', image: '/assets/ORB_UI_energia.webp', color: 'energy' },
+  life: { label: 'Soporte vital', short: 'SOP', icon: '◉', image: '/assets/ORB_UI_soporte_vital.webp', color: 'life' },
+  protection: { label: 'Protección', short: 'PRO', icon: '⬡', image: '/assets/ORB_UI_proteccion.webp', color: 'protection' },
+  morale: { label: 'Ánimo', short: 'ANI', icon: '✦', image: '/assets/ORB_UI_animo.webp', color: 'morale' },
 };
 
 export const missions = [

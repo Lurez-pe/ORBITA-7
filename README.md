@@ -27,8 +27,8 @@ npm run preview
 
 ## Recursos del proyecto
 
-Los JPG estudiantiles se copian a `public/assets/` para que Vite pueda servirlos sin alterar los originales organizados en `06_RECURSOS_GRAFICOS/`. El tripulante y el rover conservan su fondo blanco; el escenario y el icono se mantienen como JPG.
+Las copias para la web están en `public/assets/`; los originales organizados en `06_RECURSOS_GRAFICOS/` se conservan intactos. Cada misión selecciona el escenario apropiado (exterior, invernadero, refugio o sala de control) y presenta los objetos, el rover y las variantes de tripulante en pixel art. El HUD usa los cuatro iconos ilustrados; M6 incorpora el mapa de zona y la nave de suministros. El arte de menú, alertas y ajustes se integra en la navegación y en sus paneles interactivos.
 
 ## Estado
 
-MVP en desarrollo: inicio, seis misiones, HUD compacto, escena marciana animada, rover y tripulación con movimiento, acciones visuales por decisión, informe/continuar, resultados, reinicio, reservas de un uso, protocolo de bienestar y archivo NASA plegable. Incluye respeto por `prefers-reduced-motion`. Balance de la matriz v2 aún provisional. La compilación de producción se verifica con `npm run build`.
+MVP en desarrollo: menú interactivo, seis misiones con escenas específicas, HUD ilustrado, tripulación y objetos animados, acciones visuales por decisión, pausa con ajustes, informe/continuar, resultados, reinicio, reservas de un uso, protocolo de bienestar y archivo NASA plegable. Incluye respeto por `prefers-reduced-motion`. Balance de la matriz v2 aún provisional. La compilación de producción se verifica con `npm run build`.

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { missions, resourceMeta } from './data/missions.js';
+import { missions, nasaSources, resourceMeta } from './data/missions.js';
 import {
   chooseOption,
   continueAfterReport,
@@ -15,7 +15,7 @@ function ResourceGauge({ name, value }) {
   return (
     <div className={`resource resource--${meta.color}`} aria-label={`${meta.label}: ${value} por ciento`}>
       <div className="resource__top">
-        <span className="resource__icon">{meta.icon}</span>
+        <span className="resource__icon"><img src={meta.image} alt="" /></span>
         <span>{meta.label}</span>
         <b>{value}<small>%</small></b>
       </div>
@@ -79,8 +79,9 @@ function NasaEvidence({ query }) {
   </section>;
 }
 
-function Intro({ onStart }) {
-  return <main className="intro-screen">
+function Intro({ onStart, motionReduced, onToggleMotion }) {
+  const [menuPanel, setMenuPanel] = useState(null);
+  return <main className={`intro-screen${motionReduced ? ' is-motion-reduced' : ''}`}>
     <div className="intro-backdrop" />
     <header className="topbar">
       <a className="brand" href="#top"><span className="brand-mark">O7</span><span>AP EDUCATION<small>NASA SPACE APPS</small></span></a>
@@ -95,9 +96,14 @@ function Intro({ onStart }) {
         <button className="primary-button" onClick={onStart}>Entrar en la base <span>↗</span></button>
         <small className="simulation-note">Los indicadores y efectos son valores de juego, no mediciones reales de Marte.</small>
       </div>
-      <div className="intro-art">
-        <img src="/assets/ORB_ESC_base_exterior_v01.jpg" alt="Base Alpha-7 sobre la superficie de Marte" />
-        <div className="art-stamp"><b>ALPHA-7</b><span>HABITAT · SECTOR 03</span></div><div className="art-scan" />
+      <div className="intro-art intro-art--menu">
+        <img src="/assets/orbita7_menu_inicio.png" alt="Arte del menú de ORBITA-7 con controles pixel art" />
+        <div className="menu-hotspots">
+          <button className="menu-hotspot menu-hotspot--start" aria-label="Iniciar misión" title="Iniciar misión" onClick={onStart}><span>INICIAR</span></button>
+          <button className="menu-hotspot menu-hotspot--settings" aria-label="Abrir ajustes" title="Ajustes" onClick={() => setMenuPanel('settings')}><span>AJUSTES</span></button>
+          <button className="menu-hotspot menu-hotspot--credits" aria-label="Ver fuentes científicas" title="Fuentes NASA" onClick={() => setMenuPanel('credits')}><span>FUENTES</span></button>
+        </div>
+        <div className="art-scan" />
       </div>
     </section>
     <section className="intro-lower">
@@ -106,13 +112,43 @@ function Intro({ onStart }) {
       <div className="intro-data"><span className="data-icon">⌁</span><b>Dato real, simulación clara.</b><p>El polvo puede reducir la luz solar disponible para los paneles.</p><a href="https://www.nasa.gov/solar-system/the-fact-and-fiction-of-martian-dust-storms/" target="_blank" rel="noreferrer">Ver fuente NASA ↗</a></div>
     </section>
     <footer className="page-footer"><span>ORBITA-7 // FLIGHT OPERATIONS</span><span>UN PROYECTO AP EDUCATION</span><span>01 / 06</span></footer>
+    {menuPanel && <div className="menu-overlay" role="presentation" onClick={() => setMenuPanel(null)}>
+      <section className={`menu-modal menu-modal--${menuPanel}`} role="dialog" aria-modal="true" aria-labelledby="menu-modal-title" onClick={(event) => event.stopPropagation()}>
+        {menuPanel === 'settings' ? <>
+          <img className="menu-modal__art" src="/assets/orbita7_ajustes.png" alt="" />
+          <div className="menu-modal__content"><span className="eyebrow">PREFERENCIAS DE JUEGO</span><h2 id="menu-modal-title">Ajustes de misión</h2>
+            <button className="settings-toggle" onClick={onToggleMotion}><span className={motionReduced ? 'toggle-dot is-off' : 'toggle-dot'} />{motionReduced ? 'Animaciones reducidas' : 'Animaciones activas'}</button>
+            <p>Respeta también la preferencia de movimiento de tu dispositivo.</p><button className="primary-button" onClick={() => setMenuPanel(null)}>Volver al menú <span>↩</span></button>
+          </div>
+        </> : <>
+          <img className="menu-modal__art menu-modal__art--credits" src="/assets/orbita7_alerta_radiacion.png" alt="" />
+          <div className="menu-modal__content"><span className="eyebrow">CIENCIA Y ATRIBUCIÓN</span><h2 id="menu-modal-title">Fuentes NASA</h2>
+            <ul className="source-list">{nasaSources.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.label} ↗</a></li>)}</ul>
+            <button className="primary-button" onClick={() => setMenuPanel(null)}>Volver al menú <span>↩</span></button>
+          </div>
+        </>}
+      </section>
+    </div>}
   </main>;
 }
 
 function Scene({ mission, game, effect }) {
   const dustCount = 18;
-  return <div className={`playfield playfield--mission-${mission.id}`}>
-    <img className="playfield__landscape" src="/assets/ORB_ESC_base_exterior_v01.jpg" alt="" aria-hidden="true" />
+  const sceneAssets = {
+    1: { background: '/assets/ORB_ESC_base_exterior_v01.jpg', prop: '/assets/ORB_OBJ_panel_solar_v01.png', propAlt: 'Panel solar' },
+    2: { background: '/assets/ORB_ESC_invernadero_v01.webp', prop: '/assets/ORB_OBJ_extractor_hielo_v01.png', propAlt: 'Extractor de hielo' },
+    3: { background: '/assets/ORB_ESC_refugio_v01.webp', prop: '/assets/ORB_OBJ_kit_reparacion_v01.png', propAlt: 'Equipo de reparación' },
+    4: { background: '/assets/ORB_ESC_sala_control_v01.webp', prop: '/assets/ORB_OBJ_modulo_oxigeno_v01.png', propAlt: 'Módulo de oxígeno' },
+    5: { background: '/assets/ORB_ESC_base_exterior_v01.jpg', prop: '/assets/ORB_OBJ_kit_reparacion_v01.png', propAlt: 'Kit de reparación' },
+    6: { background: '/assets/ORB_ESC_sala_control_v01.webp', prop: null, propAlt: '' },
+  }[mission.id];
+  const interior = [2, 3, 4, 6].includes(mission.id);
+  const alertImage = mission.id === 1
+    ? '/assets/orbita7_alerta_tormenta_de_polvo_v3.png'
+    : mission.id === 3 ? '/assets/orbita7_alerta_radiacion.png' : null;
+  const beaconActive = effect === 'beacon' || game.flags.beacon;
+  return <div className={`playfield playfield--mission-${mission.id}${interior ? ' playfield--interior' : ''}`}>
+    <img className="playfield__landscape" src={sceneAssets.background} alt="" aria-hidden="true" />
     <div className="playfield__vignette" />
     <div className="playfield__stars" aria-hidden="true" />
     <div className="playfield__planet" aria-hidden="true" />
@@ -121,14 +157,17 @@ function Scene({ mission, game, effect }) {
     </div>
     <div className="playfield__horizon" aria-hidden="true" />
     <div className="playfield__base-light" aria-hidden="true"><i /><i /><i /></div>
-    <img className="scene-rover" src="/assets/ORB_OBJ_rover_lateral_v01.jpg" alt="Rover de la base" />
+    {sceneAssets.prop && <img className={`scene-prop scene-prop--${mission.id}`} src={sceneAssets.prop} alt={sceneAssets.propAlt} />}
+    <img className="scene-rover" src="/assets/ORB_OBJ_rover_lateral_v01.png" alt="Rover de la base" />
     <div className="scene-crew">
-      <img src="/assets/ORB_PERS_TRIPULANTE_BASE_v01.jpg" alt="Integrante de la tripulación" />
+      <div className="scene-crew__sprites"><img src="/assets/ORB_PERS_tripulante_naranja.webp" alt="Tripulante con parche naranja" /><img src="/assets/ORB_PERS_tripulante_antena.webp" alt="Tripulante con antena" /></div>
       <span>TRIPULACIÓN · 4</span>
     </div>
-    <div className={`scene-beacon${effect === 'beacon' || game.flags.beacon ? ' scene-beacon--active' : ''}`} aria-hidden="true"><i /></div>
-    <div className={`rescue-ship${mission.id === 6 ? ' rescue-ship--visible' : ''}`} aria-hidden="true"><i /><span /></div>
+    {mission.id === 6 && <div className="scene-map"><img src="/assets/ORB_MAP_alpha7.webp" alt="Mapa cenital de la base Alpha-7" /><span>MAPA DE ZONA · ALPHA-7</span><i /></div>}
+    {mission.id === 6 && <img className={`scene-beacon${beaconActive ? ' scene-beacon--active' : ''}`} src="/assets/ORB_OBJ_baliza_v01.png" alt="Baliza de emergencia" />}
+    <img className={`scene-supply-ship${mission.id === 6 ? ' scene-supply-ship--visible' : ''}`} src="/assets/ORB_OBJ_nave_suministros_v01.png" alt={mission.id === 6 ? 'Nave de suministros en aproximación' : ''} aria-hidden={mission.id !== 6} />
     <div className="playfield__warning" aria-hidden="true">PÉRDIDA DE PRESIÓN</div>
+    {alertImage && <div className="mission-alert-emblem" style={{ backgroundImage: `url(${alertImage})` }} aria-hidden="true" />}
     <div className="playfield__title">
       <div className="mission-tag"><i /> TURNO {String(mission.id).padStart(2, '0')} / 06 <b>·</b> {mission.time}</div>
       <h1>{mission.title}</h1><p>{mission.subtitle}</p>
@@ -158,22 +197,39 @@ function ResultScreen({ game, onRestart }) {
   </main>;
 }
 
+function PauseOverlay({ onResume, onMenu, motionReduced, onToggleMotion }) {
+  return <div className="pause-overlay" role="presentation">
+    <section className="pause-console" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+      <img className="pause-console__art" src="/assets/orbita7_ajustes.png" alt="" />
+      <div className="pause-console__controls">
+        <span className="eyebrow">SISTEMAS EN ESPERA</span><h2 id="pause-title">Misión en pausa</h2>
+        <button className="settings-toggle" onClick={onToggleMotion}><span className={motionReduced ? 'toggle-dot is-off' : 'toggle-dot'} />{motionReduced ? 'Animaciones reducidas' : 'Animaciones activas'}</button>
+        <button className="primary-button" onClick={onResume}>Reanudar misión <span>▶</span></button>
+        <button className="pause-menu-button" onClick={onMenu}>Salir al menú principal</button>
+      </div>
+    </section>
+  </div>;
+}
+
 export default function App() {
   const [game, setGame] = useState(freshGame);
+  const [paused, setPaused] = useState(false);
+  const [motionReduced, setMotionReduced] = useState(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false);
   const mission = missions[game.turn] ?? missions[0];
   const selectedOption = mission.options.find((option) => option.id === game.report?.optionId);
   const totalDelta = game.reportChanges ?? {};
 
-  if (game.phase === 'intro') return <Intro onStart={() => setGame(startGame())} />;
+  const toggleMotion = () => setMotionReduced((current) => !current);
+  if (game.phase === 'intro') return <Intro motionReduced={motionReduced} onToggleMotion={toggleMotion} onStart={() => { setPaused(false); setGame(startGame()); }} />;
   if (game.phase === 'result') return <ResultScreen game={game} onRestart={() => setGame(freshGame())} />;
 
   function advance() { setGame((current) => continueAfterReport(current, missions.length)); }
 
-  return <main className="game-screen">
+  return <main className={`game-screen${motionReduced ? ' is-motion-reduced' : ''}${paused ? ' is-paused' : ''}`}>
     <header className="game-topbar">
       <a className="brand" href="#top" onClick={(event) => event.preventDefault()}><span className="brand-mark">O7</span><span>ORBITA-7<small>FLIGHT OPERATIONS</small></span></a>
       <div className="mission-clock"><span className="live-dot" /> TIEMPO MARCIANO <b>{mission.time}</b></div>
-      <button className="exit-button" onClick={() => setGame(freshGame())}>Pausar misión <span>Ⅱ</span></button>
+      <button className="exit-button" onClick={() => setPaused(true)}>Pausar misión <span>Ⅱ</span></button>
     </header>
 
     <section className="game-shell">
@@ -221,5 +277,6 @@ export default function App() {
         <footer className="mission-footer"><span>SIMULACIÓN EDUCATIVA · SIN TELEMETRÍA EN VIVO</span><span>ORBITA-7 // ALPHA-7</span></footer>
       </section>
     </section>
+    {paused && <PauseOverlay onResume={() => setPaused(false)} onMenu={() => { setPaused(false); setGame(freshGame()); }} motionReduced={motionReduced} onToggleMotion={toggleMotion} />}
   </main>;
 }
