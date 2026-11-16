@@ -3,6 +3,12 @@
 
 let audioCtx = null;
 let soundEnabled = true;
+try {
+  const savedSound = localStorage.getItem('orbita7_sound');
+  if (savedSound !== null) {
+    soundEnabled = savedSound === 'true';
+  }
+} catch {}
 let userHasInteracted = false;
 
 export function markUserInteracted() {
@@ -57,6 +63,20 @@ export function isSoundEnabled() {
 
 export function toggleSound() {
   soundEnabled = !soundEnabled;
+  try {
+    localStorage.setItem('orbita7_sound', String(soundEnabled));
+  } catch {}
+  if (soundEnabled) {
+    soundClick();
+  }
+  return soundEnabled;
+}
+
+export function setSoundEnabled(val) {
+  soundEnabled = Boolean(val);
+  try {
+    localStorage.setItem('orbita7_sound', String(soundEnabled));
+  } catch {}
   if (soundEnabled) {
     soundClick();
   }

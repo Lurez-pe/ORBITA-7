@@ -18,6 +18,21 @@ export const es = {
     watchIntroButton: '🎬 VER INTRO',
   },
 
+  // Menú Interactivo de la Consola (Pantalla de Inicio)
+  menu: {
+    play: '▶ JUGAR',
+    playTitle: 'Iniciar Misión (Jugar)',
+    sound: 'SONIDO',
+    soundOn: '🔊 ON',
+    soundOff: '🔇 OFF',
+    soundTitle: 'Activar o silenciar sonido',
+    lang: 'IDIOMA',
+    langTitle: 'Cambiar idioma (EN | ES)',
+    consoleStatus: 'BASE ALPHA-7 // CONSOLA ACTIVA',
+    systemReady: 'SISTEMAS NOMINALES',
+    marsStormAlert: 'TORMENTA EN APROXIMACIÓN',
+  },
+
   // 1.1 Introducción Cinemática (5 escenas, máx 10 palabras por frase, máquina de escribir)
   cinematicIntro: {
     starTag: 'S.T.A.R. // DIRECTIVA DE BRIEFING',

@@ -30,6 +30,7 @@ import { ActionPictogram } from './components/ActionPictogram.jsx';
 import { ResultScreen } from './components/ResultScreen.jsx';
 import { LanguageSelector } from './components/LanguageSelector.jsx';
 import { CinematicIntro } from './components/CinematicIntro.jsx';
+import { InteractiveMenuConsole } from './components/InteractiveMenuConsole.jsx';
 import { getLocale, getSavedLanguage, saveLanguage } from './data/i18n.js';
 
 // =========================================================================
@@ -454,7 +455,12 @@ function IntroScreen({ onStart, onWatchIntro, lang, setLang, t }) {
         </div>
 
         <div className="intro-art intro-art--menu">
-          <img src="/assets/orbita7_menu_inicio.png" alt="ORBITA-7" />
+          <InteractiveMenuConsole
+            onStartMission={onStart}
+            currentLang={lang}
+            onChangeLang={setLang}
+            t={t}
+          />
         </div>
       </section>
     </main>

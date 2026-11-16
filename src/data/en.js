@@ -18,6 +18,21 @@ export const en = {
     watchIntroButton: '🎬 WATCH INTRO',
   },
 
+  // Interactive Console Menu (Intro Screen Artwork)
+  menu: {
+    play: '▶ PLAY',
+    playTitle: 'Start Mission (Play)',
+    sound: 'SOUND',
+    soundOn: '🔊 ON',
+    soundOff: '🔇 OFF',
+    soundTitle: 'Toggle sound (ON / OFF)',
+    lang: 'LANG',
+    langTitle: 'Switch Language (EN | ES)',
+    consoleStatus: 'BASE ALPHA-7 // CONSOLE ACTIVE',
+    systemReady: 'ALL SYSTEMS NOMINAL',
+    marsStormAlert: 'STORM APPROACHING',
+  },
+
   // 1.1 Cinematic Intro (5 scenes, max 10 words per phrase, typewriter effect)
   cinematicIntro: {
     starTag: 'S.T.A.R. // BRIEFING DIRECTIVE',
