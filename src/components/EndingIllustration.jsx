@@ -15,7 +15,7 @@ export function EndingIllustration({ endingType, t }) {
     return (
       <div className="ending-art-box ending-art--finalA" title={endingMeta?.title}>
         <img
-          src="/assets/ORB_ESC_base_exterior_v01.jpg"
+          src="assets/ORB_ESC_base_exterior_v01.jpg"
           alt=""
           className="ending-art-bg"
         />
@@ -25,7 +25,7 @@ export function EndingIllustration({ endingType, t }) {
         {/* Haz dorado de baliza activa */}
         <div className="ending-beacon-beam-gold" />
         <img
-          src="/assets/ORB_OBJ_baliza_v01.png"
+          src="assets/ORB_OBJ_baliza_v01.png"
           alt=""
           className="ending-beacon-obj"
         />
@@ -33,7 +33,7 @@ export function EndingIllustration({ endingType, t }) {
         {/* Nave de suministros posada con éxito */}
         <div className="ending-ship-landed">
           <img
-            src="/assets/ORB_OBJ_nave_suministros_v01.png"
+            src="assets/ORB_OBJ_nave_suministros_v01.png"
             alt=""
             className="ending-ship-img"
           />
@@ -43,12 +43,12 @@ export function EndingIllustration({ endingType, t }) {
         {/* Tripulación celebrando */}
         <div className="ending-crew-celebrating">
           <img
-            src="/assets/ORB_PERS_tripulante_lider.webp"
+            src="assets/ORB_PERS_tripulante_lider.webp"
             alt=""
             className="ending-crew-sprite"
           />
           <img
-            src="/assets/ORB_PERS_tripulante_naranja.webp"
+            src="assets/ORB_PERS_tripulante_naranja.webp"
             alt=""
             className="ending-crew-sprite"
           />
@@ -64,7 +64,7 @@ export function EndingIllustration({ endingType, t }) {
     return (
       <div className="ending-art-box ending-art--finalB" title={endingMeta?.title}>
         <img
-          src="/assets/ORB_ESC_base_exterior_v01.jpg"
+          src="assets/ORB_ESC_base_exterior_v01.jpg"
           alt=""
           className="ending-art-bg"
         />
@@ -74,7 +74,7 @@ export function EndingIllustration({ endingType, t }) {
         {/* Baliza amarilla parpadeante */}
         <div className="ending-beacon-beam-yellow" />
         <img
-          src="/assets/ORB_OBJ_baliza_v01.png"
+          src="assets/ORB_OBJ_baliza_v01.png"
           alt=""
           className="ending-beacon-obj"
         />
@@ -82,7 +82,7 @@ export function EndingIllustration({ endingType, t }) {
         {/* Nave inclinada con polvo */}
         <div className="ending-ship-rough">
           <img
-            src="/assets/ORB_OBJ_nave_suministros_v01.png"
+            src="assets/ORB_OBJ_nave_suministros_v01.png"
             alt=""
             className="ending-ship-img"
           />
@@ -92,7 +92,7 @@ export function EndingIllustration({ endingType, t }) {
         {/* Tripulante evaluando daños */}
         <div className="ending-crew-standing">
           <img
-            src="/assets/ORB_PERS_tripulante_lider.webp"
+            src="assets/ORB_PERS_tripulante_lider.webp"
             alt=""
             className="ending-crew-sprite"
           />
@@ -113,7 +113,7 @@ export function EndingIllustration({ endingType, t }) {
         {/* Nave en órbita alta */}
         <div className="ending-ship-in-orbit">
           <img
-            src="/assets/ORB_OBJ_nave_suministros_v01.png"
+            src="assets/ORB_OBJ_nave_suministros_v01.png"
             alt=""
             className="ending-ship-orbit-img"
           />
@@ -125,7 +125,7 @@ export function EndingIllustration({ endingType, t }) {
         {/* Base abajo a oscuras */}
         <div className="ending-ground-silhouette">
           <img
-            src="/assets/ORB_OBJ_baliza_v01.png"
+            src="assets/ORB_OBJ_baliza_v01.png"
             alt=""
             className="ending-beacon-dark"
           />
@@ -141,7 +141,7 @@ export function EndingIllustration({ endingType, t }) {
         <div className="emergency-red-flash-layer" />
         <div className="emergency-siren-center">
           <img
-            src="/assets/orbita7_alerta_radiacion.png"
+            src="assets/orbita7_alerta_radiacion.png"
             alt=""
             className="emergency-badge-img"
           />
@@ -153,3 +153,4 @@ export function EndingIllustration({ endingType, t }) {
     </div>
   );
 }
+
