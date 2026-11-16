@@ -37,8 +37,13 @@ jobs:
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v4
         with:
+          # Reruns retain artifacts from earlier attempts under the same run ID.
+          # Include the attempt number so deploy-pages finds exactly one artifact.
+          name: github-pages-${{ github.run_attempt }}
           path: dist
       - name: Deploy site
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
 
