@@ -3,6 +3,18 @@
 // Textos cortos, directos y naturales en estilo retro sci-fi.
 
 export const es = {
+  // Pantalla de Inicio (Diseño limpio de 3 botones)
+  startScreen: {
+    title: 'ORBITA-7',
+    tagline: '72 horas para sobrevivir en Marte',
+    play: 'JUGAR',
+    playTitle: 'Iniciar introducción y misión',
+    langAria: 'Cambiar idioma: Español o Inglés',
+    soundOn: 'SONIDO',
+    soundOff: 'SILENCIO',
+    soundTitle: 'Activar o silenciar sonido',
+  },
+
   // 1. Briefing / Pantalla de introducción
   briefing: {
     eyebrow: 'MARTE, 2042 · BASE ALPHA-7',

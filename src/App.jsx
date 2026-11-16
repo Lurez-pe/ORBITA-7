@@ -17,6 +17,7 @@ import {
 } from './game/engine.js';
 import {
   isSoundEnabled,
+  markUserInteracted,
   soundAction,
   soundAlert,
   soundClick,
@@ -30,7 +31,6 @@ import { ActionPictogram } from './components/ActionPictogram.jsx';
 import { ResultScreen } from './components/ResultScreen.jsx';
 import { LanguageSelector } from './components/LanguageSelector.jsx';
 import { CinematicIntro } from './components/CinematicIntro.jsx';
-import { InteractiveMenuConsole } from './components/InteractiveMenuConsole.jsx';
 import { getLocale, getSavedLanguage, saveLanguage } from './data/i18n.js';
 
 // =========================================================================
@@ -383,86 +383,127 @@ function DecisionConsole({
 }
 
 // =========================================================================
-// PANTALLA DE INTRODUCCIÓN (BRIEFING)
+// PANTALLA DE INICIO (ORBITA-7 - DISEÑO LIMPIO DE 3 BOTONES)
+// 1. Título "ORBITA-7" grande y subtítulo ("72 hours to survive on Mars")
+// 2. Fondo decorativo: base marciana pixel art con polvo y balizas (no clicable)
+// 3. Botón PLAY: grande, centrado, pulso suave (inicia intro y misión)
+// 4. Sub-fila con 2 botones de igual tamaño: IDIOMA (EN | ES) y SONIDO (🔊 / 🔇)
+// 5. Sin ningún otro botón o icono
 // =========================================================================
-function IntroScreen({ onStart, onWatchIntro, lang, setLang, t }) {
+function IntroScreen({ onStart, lang, setLang, t }) {
   const [soundActive, setSoundActive] = useState(isSoundEnabled);
 
+  const handlePlayClick = () => {
+    markUserInteracted();
+    soundConfirm();
+    onStart();
+  };
+
+  const handleToggleLang = () => {
+    markUserInteracted();
+    soundClick();
+    const nextLang = lang === 'en' ? 'es' : 'en';
+    setLang(nextLang);
+  };
+
+  const handleToggleSound = () => {
+    markUserInteracted();
+    const nextSound = toggleSound();
+    setSoundActive(nextSound);
+  };
+
+  const strings = t.startScreen ?? {
+    title: 'ORBITA-7',
+    tagline: lang === 'es' ? '72 horas para sobrevivir en Marte' : '72 hours to survive on Mars',
+    play: lang === 'es' ? 'JUGAR' : 'PLAY',
+    playTitle: lang === 'es' ? 'Iniciar introducción y misión' : 'Start introduction and mission',
+    langAria: lang === 'es' ? 'Cambiar idioma: Español o Inglés' : 'Switch language: English or Spanish',
+    soundOn: lang === 'es' ? 'SONIDO' : 'SOUND',
+    soundOff: lang === 'es' ? 'SILENCIO' : 'MUTED',
+    soundTitle: lang === 'es' ? 'Activar o silenciar sonido' : 'Toggle sound',
+  };
+
   return (
-    <main className="intro-screen">
-      <div className="intro-backdrop" />
-      <header className="topbar">
-        <a className="brand" href="#top">
-          <span className="brand-mark">{t.hud.brandBadge}</span>
-          <span>
-            {t.hud.brandName}
-            <small>{t.hud.baseLocation}</small>
-          </span>
-        </a>
-        <div className="topbar__controls">
-          <LanguageSelector currentLang={lang} onChangeLang={setLang} />
+    <main className="start-screen" role="main">
+      {/* 1. FONDO DECORATIVO: BASE MARCIANA PIXEL ART CON POLVO Y BALIZAS (NO CLICABLE) */}
+      <div className="start-screen__backdrop" aria-hidden="true">
+        <img
+          src="/assets/ORB_ESC_base_exterior_v01.jpg"
+          alt=""
+          className="start-screen__bg-image"
+        />
+        {/* Polvo marciano en movimiento */}
+        <div className="start-screen__dust" />
+        {/* Balizas y luces de la base parpadeando en pixel art */}
+        <div className="start-screen__beacon beacon--1" />
+        <div className="start-screen__beacon beacon--2" />
+        <div className="start-screen__beacon beacon--3" />
+        {/* Scanlines CRT retro */}
+        <div className="start-screen__scanlines" />
+        {/* Viñeta para máximo contraste de textos y controles */}
+        <div className="start-screen__vignette" />
+      </div>
+
+      {/* 2. CONTENIDO PRINCIPAL: TÍTULO, SUBTÍTULO Y LOS 3 ÚNICOS BOTONES */}
+      <div className="start-screen__content">
+        <header className="start-screen__header">
+          <h1 className="start-screen__title">{strings.title}</h1>
+          <p className="start-screen__tagline">{strings.tagline}</p>
+        </header>
+
+        <div className="start-screen__controls">
+          {/* BOTÓN 1: PLAY (GRANDE, CENTRADO, PULSO SUAVE) */}
           <button
-            className="icon-pill-button"
-            onClick={() => setSoundActive(toggleSound())}
-            title={t.hud.soundTitle}
+            type="button"
+            className="start-btn-play is-pulsing"
+            onClick={handlePlayClick}
+            onMouseEnter={soundHover}
+            title={strings.playTitle}
+            aria-label={strings.playTitle}
           >
-            {soundActive ? '🔊' : '🔇'}
+            <span className="play-icon" aria-hidden="true">▶</span>
+            <span className="play-text">{strings.play}</span>
           </button>
-        </div>
-      </header>
 
-      <section className="intro-hero" id="top">
-        <div className="intro-copy">
-          <span className="eyebrow"><i /> {t.briefing.eyebrow}</span>
-          <h1>
-            {t.briefing.headline.split('\n').map((line, idx) => (
-              <span key={idx} style={{ display: 'block' }}>
-                {line}
+          {/* FILA CON LOS DOS BOTONES PEQUEÑOS DEL MISMO TAMAÑO */}
+          <div className="start-screen__sub-row">
+            {/* BOTÓN 2: IDIOMA (EN | ES) */}
+            <button
+              type="button"
+              className="start-btn-sub start-btn-sub--lang"
+              onClick={handleToggleLang}
+              onMouseEnter={soundHover}
+              title={strings.langAria}
+              aria-label={strings.langAria}
+            >
+              <span className="sub-icon" aria-hidden="true">🌐</span>
+              <span className="sub-label">
+                <span className={`lang-tag ${lang === 'en' ? 'is-active' : ''}`}>EN</span>
+                <span className="lang-sep">|</span>
+                <span className={`lang-tag ${lang === 'es' ? 'is-active' : ''}`}>ES</span>
               </span>
-            ))}
-          </h1>
-          <p>{t.briefing.description}</p>
-
-          <div className="intro-meta">
-            <span><b>{t.briefing.turnsCount}</b> {t.briefing.turnsLabel}</span>
-            <span><b>{t.briefing.systemsCount}</b> {t.briefing.systemsLabel}</span>
-            <span><b>{t.briefing.hoursCount}</b> {t.briefing.hoursLabel}</span>
-          </div>
-
-          <div className="intro-actions-row">
-            <button
-              className="primary-button"
-              onClick={() => {
-                soundConfirm();
-                onStart();
-              }}
-              onMouseEnter={soundHover}
-            >
-              {t.briefing.startButton} <span>➔</span>
             </button>
+
+            {/* BOTÓN 3: SONIDO (ICONO QUE CAMBIA Y TEXTO) */}
             <button
-              className="secondary-pixel-btn"
-              onClick={() => {
-                soundClick();
-                onWatchIntro();
-              }}
+              type="button"
+              className={`start-btn-sub start-btn-sub--sound ${soundActive ? 'is-on' : 'is-off'}`}
+              onClick={handleToggleSound}
               onMouseEnter={soundHover}
-              title={t.cinematicIntro.watchIntroTitle}
+              title={strings.soundTitle}
+              aria-label={strings.soundTitle}
+              aria-pressed={soundActive}
             >
-              {t.briefing.watchIntroButton}
+              <span className="sub-icon" aria-hidden="true">
+                {soundActive ? '🔊' : '🔇'}
+              </span>
+              <span className="sub-label">
+                {soundActive ? strings.soundOn : strings.soundOff}
+              </span>
             </button>
           </div>
         </div>
-
-        <div className="intro-art intro-art--menu">
-          <InteractiveMenuConsole
-            onStartMission={onStart}
-            currentLang={lang}
-            onChangeLang={setLang}
-            t={t}
-          />
-        </div>
-      </section>
+      </div>
     </main>
   );
 }
@@ -653,7 +694,6 @@ export default function App() {
     return (
       <IntroScreen
         onStart={handleTriggerCinematicIntro}
-        onWatchIntro={handleTriggerCinematicIntro}
         lang={lang}
         setLang={handleSetLang}
         t={t}

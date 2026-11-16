@@ -3,6 +3,18 @@
 // Short, natural, and punchy retro sci-fi text.
 
 export const en = {
+  // Start Screen (Clean 3-Button Layout)
+  startScreen: {
+    title: 'ORBITA-7',
+    tagline: '72 hours to survive on Mars',
+    play: 'PLAY',
+    playTitle: 'Start introduction and mission',
+    langAria: 'Switch language: English or Spanish',
+    soundOn: 'SOUND',
+    soundOff: 'MUTED',
+    soundTitle: 'Toggle sound (ON / OFF)',
+  },
+
   // 1. Briefing / Intro Screen
   briefing: {
     eyebrow: 'MARS, 2042 · BASE ALPHA-7',
