@@ -22,16 +22,16 @@ export const TOTAL_GAME_HOURS = 72;
 
 export const resourceMeta = {
   es: {
-    energy: { label: es.resources.energy.label, code: 'var_energia', short: 'ENE', icon: '⚡', image: '/assets/ORB_UI_energia.webp', color: 'energy' },
-    life: { label: es.resources.life.label, code: 'var_soporte', short: 'SOP', icon: '🫁', image: '/assets/ORB_UI_soporte_vital.webp', color: 'life' },
-    supplies: { label: es.resources.supplies.label, code: 'var_suministros', short: 'AGU', icon: '💧', image: '/assets/ORB_UI_animo.webp', color: 'supplies' },
-    safety: { label: es.resources.safety.label, code: 'var_seguridad', short: 'SEG', icon: '🛡️', image: '/assets/ORB_UI_proteccion.webp', color: 'safety' },
+    energy: { label: es.resources.energy.label, code: 'var_energia', short: 'ENE', icon: '⚡', image: 'assets/ORB_UI_energia.webp', color: 'energy' },
+    life: { label: es.resources.life.label, code: 'var_soporte', short: 'SOP', icon: '🫁', image: 'assets/ORB_UI_soporte_vital.webp', color: 'life' },
+    supplies: { label: es.resources.supplies.label, code: 'var_suministros', short: 'AGU', icon: '💧', image: 'assets/ORB_UI_animo.webp', color: 'supplies' },
+    safety: { label: es.resources.safety.label, code: 'var_seguridad', short: 'SEG', icon: '🛡️', image: 'assets/ORB_UI_proteccion.webp', color: 'safety' },
   },
   en: {
-    energy: { label: en.resources.energy.label, code: 'var_energia', short: 'ENG', icon: '⚡', image: '/assets/ORB_UI_energia.webp', color: 'energy' },
-    life: { label: en.resources.life.label, code: 'var_soporte', short: 'LIF', icon: '🫁', image: '/assets/ORB_UI_soporte_vital.webp', color: 'life' },
-    supplies: { label: en.resources.supplies.label, code: 'var_suministros', short: 'WAT', icon: '💧', image: '/assets/ORB_UI_animo.webp', color: 'supplies' },
-    safety: { label: en.resources.safety.label, code: 'var_seguridad', short: 'SAF', icon: '🛡️', image: '/assets/ORB_UI_proteccion.webp', color: 'safety' },
+    energy: { label: en.resources.energy.label, code: 'var_energia', short: 'ENG', icon: '⚡', image: 'assets/ORB_UI_energia.webp', color: 'energy' },
+    life: { label: en.resources.life.label, code: 'var_soporte', short: 'LIF', icon: '🫁', image: 'assets/ORB_UI_soporte_vital.webp', color: 'life' },
+    supplies: { label: en.resources.supplies.label, code: 'var_suministros', short: 'WAT', icon: '💧', image: 'assets/ORB_UI_animo.webp', color: 'supplies' },
+    safety: { label: en.resources.safety.label, code: 'var_seguridad', short: 'SAF', icon: '🛡️', image: 'assets/ORB_UI_proteccion.webp', color: 'safety' },
   },
 };
 
@@ -49,3 +49,4 @@ export const endingsData = {
   en: en.endings,
   es: es.endings,
 };
+

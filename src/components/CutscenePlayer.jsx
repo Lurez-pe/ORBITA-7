@@ -75,7 +75,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
     >
       {/* Fondo de escena del plano actual */}
       <img
-        src={currentShot.sceneBg ?? '/assets/ORB_ESC_base_exterior_v01.jpg'}
+        src={currentShot.sceneBg ?? 'assets/ORB_ESC_base_exterior_v01.jpg'}
         className="cutscene-bg-img"
         alt=""
       />
@@ -106,7 +106,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
             <div className="detail-rover-brush-box">
               <div className="macro-rover-arm">
                 <img
-                  src="/assets/ORB_OBJ_rover_lateral_v01.png"
+                  src="assets/ORB_OBJ_rover_lateral_v01.png"
                   alt=""
                   className="macro-rover-sprite"
                 />
@@ -123,7 +123,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
             <div className="detail-suit-o2-box">
               <div className="macro-helmet-view">
                 <img
-                  src="/assets/ORB_PERS_tripulante_lider.webp"
+                  src="assets/ORB_PERS_tripulante_lider.webp"
                   alt=""
                   className="macro-helmet-sprite"
                 />
@@ -170,7 +170,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
           {currentShot.detailView === 'thawing_pipe' && (
             <div className="detail-pipe-thaw-box">
               <img
-                src="/assets/ORB_OBJ_extractor_hielo_v01.png"
+                src="assets/ORB_OBJ_extractor_hielo_v01.png"
                 alt=""
                 className="macro-extractor-sprite"
               />
@@ -182,7 +182,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
           {currentShot.detailView === 'welded_patch' && (
             <div className="detail-weld-patch-box">
               <img
-                src="/assets/ORB_OBJ_modulo_oxigeno_v01.png"
+                src="assets/ORB_OBJ_modulo_oxigeno_v01.png"
                 alt=""
                 className="macro-o2module-sprite"
               />
@@ -194,7 +194,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
           {currentShot.detailView === 'beacon_strobe' && (
             <div className="detail-beacon-strobe-box">
               <img
-                src="/assets/ORB_OBJ_baliza_v01.png"
+                src="assets/ORB_OBJ_baliza_v01.png"
                 alt=""
                 className="macro-beacon-sprite"
               />
@@ -213,7 +213,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
               className={`cutscene-rover-actor actor-${currentShot.rover.state ?? 'driving'}`}
             >
               <img
-                src="/assets/ORB_OBJ_rover_lateral_v01.png"
+                src="assets/ORB_OBJ_rover_lateral_v01.png"
                 alt=""
                 className="rover-actor-img"
               />
@@ -229,18 +229,18 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
               className={`cutscene-crew-actors actor-${currentShot.crew.state ?? 'walking'}`}
             >
               <img
-                src="/assets/ORB_PERS_tripulante_lider.webp"
+                src="assets/ORB_PERS_tripulante_lider.webp"
                 alt=""
                 className="crew-lead-sprite"
               />
               <img
-                src="/assets/ORB_PERS_tripulante_naranja.webp"
+                src="assets/ORB_PERS_tripulante_naranja.webp"
                 alt=""
                 className="crew-second-sprite"
               />
               {currentShot.crew.tools && (
                 <img
-                  src="/assets/ORB_OBJ_kit_reparacion_v01.png"
+                  src="assets/ORB_OBJ_kit_reparacion_v01.png"
                   alt=""
                   className="crew-tool-sprite"
                 />
@@ -251,7 +251,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
           {/* Matriz de paneles en plano medio */}
           <div className="medium-panels-target">
             <img
-              src="/assets/ORB_OBJ_panel_solar_v01.png"
+              src="assets/ORB_OBJ_panel_solar_v01.png"
               alt=""
               className="medium-panel-img"
             />
@@ -292,7 +292,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
           {/* Paneles solares en plano general */}
           <div className="general-solar-farm">
             <img
-              src="/assets/ORB_OBJ_panel_solar_v01.png"
+              src="assets/ORB_OBJ_panel_solar_v01.png"
               alt=""
               className="general-panel-sprite"
             />
@@ -306,7 +306,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
           {currentShot.rover && (
             <div className={`general-rover-pos rover-${currentShot.rover.state}`}>
               <img
-                src="/assets/ORB_OBJ_rover_lateral_v01.png"
+                src="assets/ORB_OBJ_rover_lateral_v01.png"
                 alt=""
                 className="general-rover-img"
               />
@@ -317,12 +317,12 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
           {currentShot.crew && (
             <div className={`general-crew-pos crew-${currentShot.crew.state}`}>
               <img
-                src="/assets/ORB_PERS_tripulante_lider.webp"
+                src="assets/ORB_PERS_tripulante_lider.webp"
                 alt=""
                 className="general-crew-img"
               />
               <img
-                src="/assets/ORB_PERS_tripulante_naranja.webp"
+                src="assets/ORB_PERS_tripulante_naranja.webp"
                 alt=""
                 className="general-crew-img"
               />
@@ -345,7 +345,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
           {currentShot.skyShipOrbit && (
             <div className="general-orbit-ship-actor">
               <img
-                src="/assets/ORB_OBJ_nave_suministros_v01.png"
+                src="assets/ORB_OBJ_nave_suministros_v01.png"
                 alt=""
                 className="orbit-ship-sprite"
               />
@@ -356,7 +356,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
           {currentShot.beaconTurnOn && (
             <div className="general-beacon-actor">
               <img
-                src="/assets/ORB_OBJ_baliza_v01.png"
+                src="assets/ORB_OBJ_baliza_v01.png"
                 alt=""
                 className="beacon-obj-sprite"
               />
@@ -409,3 +409,4 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
     </div>
   );
 }
+

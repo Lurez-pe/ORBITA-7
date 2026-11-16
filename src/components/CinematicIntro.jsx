@@ -198,7 +198,7 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
         {sceneIndex === 0 && (
           <div className="intro-scene intro-scene--1">
             <img
-              src="/assets/ORB_ESC_base_exterior_v01.jpg"
+              src="assets/ORB_ESC_base_exterior_v01.jpg"
               alt=""
               className="scene-bg-pixel"
             />
@@ -209,22 +209,22 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
             <div className="crew-lineup-unit">
               <div className="crew-sprites-group">
                 <img
-                  src="/assets/ORB_PERS_tripulante_lider.webp"
+                  src="assets/ORB_PERS_tripulante_lider.webp"
                   alt="Comandante"
                   className="crew-avatar-pixel"
                 />
                 <img
-                  src="/assets/ORB_PERS_tripulante_naranja.webp"
+                  src="assets/ORB_PERS_tripulante_naranja.webp"
                   alt="Especialista"
                   className="crew-avatar-pixel"
                 />
                 <img
-                  src="/assets/ORB_PERS_tripulante_antena.webp"
+                  src="assets/ORB_PERS_tripulante_antena.webp"
                   alt="Comunicaciones"
                   className="crew-avatar-pixel"
                 />
                 <img
-                  src="/assets/ORB_PERS_tripulante_naranja.webp"
+                  src="assets/ORB_PERS_tripulante_naranja.webp"
                   alt="Operador"
                   className="crew-avatar-pixel"
                 />
@@ -235,7 +235,7 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
             {/* Rover estacionado */}
             <div className="rover-parked-unit">
               <img
-                src="/assets/ORB_OBJ_rover_lateral_v01.png"
+                src="assets/ORB_OBJ_rover_lateral_v01.png"
                 alt=""
                 className="rover-sprite-pixel"
               />
@@ -244,7 +244,7 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
             {/* Paneles solares limpios iniciales */}
             <div className="solar-clean-unit">
               <img
-                src="/assets/ORB_OBJ_panel_solar_v01.png"
+                src="assets/ORB_OBJ_panel_solar_v01.png"
                 alt=""
                 className="panel-sprite-pixel"
               />
@@ -256,7 +256,7 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
         {sceneIndex === 1 && (
           <div className="intro-scene intro-scene--2">
             <img
-              src="/assets/ORB_ESC_base_exterior_v01.jpg"
+              src="assets/ORB_ESC_base_exterior_v01.jpg"
               alt=""
               className="scene-bg-pixel is-darkened"
             />
@@ -272,14 +272,14 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
             {/* Paneles solares cubriéndose de polvo */}
             <div className="solar-dusting-unit">
               <img
-                src="/assets/ORB_OBJ_panel_solar_v01.png"
+                src="assets/ORB_OBJ_panel_solar_v01.png"
                 alt=""
                 className="panel-sprite-pixel"
               />
               <div className="pixel-dust-blanket is-active" />
               <div className="storm-alert-badge">
                 <img
-                  src="/assets/orbita7_alerta_tormenta_de_polvo_v3.png"
+                  src="assets/orbita7_alerta_tormenta_de_polvo_v3.png"
                   alt=""
                   className="storm-alert-icon"
                 />
@@ -296,7 +296,7 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
         {sceneIndex === 2 && (
           <div className="intro-scene intro-scene--3">
             <img
-              src="/assets/ORB_ESC_sala_control_v01.webp"
+              src="assets/ORB_ESC_sala_control_v01.webp"
               alt=""
               className="scene-bg-pixel"
             />
@@ -321,7 +321,7 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
             <div className="comms-disrupt-hero-card">
               <div className="antenna-sprite-box">
                 <img
-                  src="/assets/ORB_PERS_tripulante_antena.webp"
+                  src="assets/ORB_PERS_tripulante_antena.webp"
                   alt=""
                   className="antenna-tech-sprite"
                 />
@@ -358,7 +358,7 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
                 {/* Mapa táctico de la colonia */}
                 <div className="tactical-colony-map">
                   <img
-                    src="/assets/ORB_MAP_alpha7.webp"
+                    src="assets/ORB_MAP_alpha7.webp"
                     alt=""
                     className="colony-map-img"
                   />
@@ -382,7 +382,7 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
               {/* Nave de suministros en órbita */}
               <div className="cargo-ship-orbit-actor">
                 <img
-                  src="/assets/ORB_OBJ_nave_suministros_v01.png"
+                  src="assets/ORB_OBJ_nave_suministros_v01.png"
                   alt=""
                   className="cargo-vessel-sprite"
                 />
@@ -450,3 +450,4 @@ export function CinematicIntro({ t, lang, onChangeLang, onStartMission, onBackTo
     </div>
   );
 }
+

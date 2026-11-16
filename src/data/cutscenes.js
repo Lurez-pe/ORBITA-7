@@ -19,7 +19,7 @@ export const cutscenesData = {
       camera: 'cam-pan-left',
       sound: 'storm',
       text: 'Tormenta de polvo activa', // 4 palabras
-      sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+      sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
       skyDarkness: 90,
       dustStorm: true,
       sunDimmed: true,
@@ -46,7 +46,7 @@ export const cutscenesData = {
             camera: 'cam-pan-right',
             sound: 'garage_open',
             text: 'Compuerta de garaje abierta', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             garageDoor: 'opening',
             rover: { state: 'exiting', progress: 30 },
             skyDarkness: 80,
@@ -60,7 +60,7 @@ export const cutscenesData = {
             camera: 'cam-pan-right',
             sound: 'rover_drive',
             text: 'Rover en terreno marciano', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             rover: { state: 'driving_forward', progress: 60 },
             skyDarkness: 80,
             dustStorm: true,
@@ -73,7 +73,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'brush_extend',
             text: 'Cepillo de limpieza', // 3 palabras (especificación exacta)
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             detailView: 'rover_brush_arm',
             brushActive: true,
           },
@@ -84,7 +84,7 @@ export const cutscenesData = {
             camera: 'cam-pan-right',
             sound: 'brush_clean',
             text: 'Limpieza activa de paneles', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             rover: { state: 'sweeping_panels', progress: 90 },
             panelsCovered: 'clearing_chunks',
             skyDarkness: 80,
@@ -97,7 +97,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Sigue la tormenta', // 3 palabras (especificación exacta)
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             panelsCovered: false,
             panelsGlint: true,
             skyDarkness: 85,
@@ -119,7 +119,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'airlock_whoosh',
             text: 'Esclusa principal abierta', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             airlockDoor: 'open',
             crew: { state: 'exiting', count: 2 },
             skyDarkness: 85,
@@ -133,7 +133,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'oxygen_vent',
             text: 'Oxígeno del traje', // 3 palabras (especificación exacta)
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             detailView: 'suit_o2_meter',
             oxygenLevel: 72,
           },
@@ -144,7 +144,7 @@ export const cutscenesData = {
             camera: 'cam-pan-left',
             sound: 'footsteps',
             text: 'Caminando contra el viento', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             crew: { state: 'walking_wind', count: 2, tools: true },
             skyDarkness: 85,
             dustStorm: true,
@@ -157,7 +157,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'manual_scrub',
             text: 'Limpieza manual intensiva', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             crew: { state: 'cleaning_panels', count: 2 },
             panelsCovered: 'clearing_chunks',
             skyDarkness: 85,
@@ -170,7 +170,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'airlock_close',
             text: 'Salida de riesgo', // 3 palabras (especificación exacta)
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             airlockDoor: 'closing',
             crew: { state: 'entered', count: 2 },
             panelsCovered: false,
@@ -193,7 +193,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'power_down',
             text: 'Módulos secundarios apagados', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             lightsShutoffSequence: true,
             skyDarkness: 90,
             dustStorm: true,
@@ -206,7 +206,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'switch_click',
             text: 'Interruptores de ahorro activados', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             detailView: 'breaker_switches',
             switchesFlipped: true,
           },
@@ -217,7 +217,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'crew_hum',
             text: 'Tripulación en espera estática', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             interiorDim: true,
             crewInside: true,
           },
@@ -228,7 +228,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'battery_charge',
             text: 'Ahorro, sin limpiar', // 3 palabras (especificación exacta)
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             batteryRebound: true,
             panelsCovered: true,
             skyDarkness: 90,
@@ -251,7 +251,7 @@ export const cutscenesData = {
       camera: 'cam-zoom-in',
       sound: 'alarm',
       text: 'Tubería de hielo congelada', // 4 palabras
-      sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+      sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
       extractorFrozen: true,
       iceCrystals: true,
       flowMeter: 0,
@@ -268,7 +268,7 @@ export const cutscenesData = {
             camera: 'cam-pan-right',
             sound: 'rover_motor',
             text: 'Unidad térmica en camino', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+            sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
             rover: { state: 'delivering_heater' },
           },
           {
@@ -278,7 +278,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'heater',
             text: 'Calentador térmico activado', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+            sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
             thermalTorch: true,
           },
           {
@@ -288,7 +288,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'steam',
             text: 'Hielo derritiéndose rápidamente', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+            sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
             detailView: 'thawing_pipe',
             steamJets: true,
           },
@@ -299,7 +299,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Agua fluyendo al hábitat', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+            sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
             flowMeter: 85,
             waterNormal: true,
           },
@@ -316,7 +316,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'switch_click',
             text: 'Sistema de reciclaje activo', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             recyclingActive: true,
           },
           {
@@ -326,7 +326,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'switch_click',
             text: 'Válvulas secundarias abiertas', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             detailView: 'water_valves',
           },
           {
@@ -336,7 +336,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'steam',
             text: 'Filtración en ciclo cerrado', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             filterFlow: true,
           },
           {
@@ -346,7 +346,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Agua reciclada con éxito', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             recyclingComplete: true,
           },
         ],
@@ -362,7 +362,7 @@ export const cutscenesData = {
             camera: 'cam-pan-left',
             sound: 'airlock_whoosh',
             text: 'Salida con material aislante', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+            sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
             crew: { state: 'carrying_insulation' },
           },
           {
@@ -372,7 +372,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'manual_scrub',
             text: 'Colocación de mantas térmicas', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+            sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
             crewWrapping: true,
           },
           {
@@ -382,7 +382,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'switch_click',
             text: 'Sellado contra congelamiento', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+            sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
             detailView: 'insulated_pipe',
           },
           {
@@ -392,7 +392,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Protección térmica completada', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+            sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
             protectionComplete: true,
           },
         ],
@@ -412,7 +412,7 @@ export const cutscenesData = {
       camera: 'cam-shake',
       sound: 'alarm',
       text: 'Destello de radiación solar', // 4 palabras
-      sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+      sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
       radiationFlare: true,
       skyGlow: 'orange-bright',
       dosimeterRed: true,
@@ -429,7 +429,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'alarm',
             text: 'Alarma de evacuación activada', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             alarmKlaxon: true,
           },
           {
@@ -439,7 +439,7 @@ export const cutscenesData = {
             camera: 'cam-pan-left',
             sound: 'footsteps',
             text: 'Tripulantes corriendo hacia refugio', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             crewRunning: true,
           },
           {
@@ -449,7 +449,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'airlock_close',
             text: 'Compuerta blindada sellada herméticamente', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             detailView: 'heavy_bulkhead',
           },
           {
@@ -459,7 +459,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Refugio activo bajo tierra', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             bunkerSafe: true,
           },
         ],
@@ -475,7 +475,7 @@ export const cutscenesData = {
             camera: 'cam-pan-right',
             sound: 'rover_motor',
             text: 'Rover pala cargando regolito', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             rover: { state: 'scooping_regolith' },
           },
           {
@@ -485,7 +485,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'footsteps',
             text: 'Apilando tierra sobre cúpula', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             pilingRegolith: true,
           },
           {
@@ -495,7 +495,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Capa protectora absorbiendo radiación', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             detailView: 'regolith_layer',
           },
           {
@@ -505,7 +505,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Blindaje de regolito completo', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             domeShielded: true,
           },
         ],
@@ -521,7 +521,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'alarm',
             text: 'Base expuesta en superficie', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             surfaceRadiation: true,
           },
           {
@@ -531,7 +531,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'alarm',
             text: 'Dosímetros en nivel crítico', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             detailView: 'dosimeter_gauges',
           },
           {
@@ -541,7 +541,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'crew_hum',
             text: 'Monitoreo continuo en pantallas', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             monitoringActive: true,
           },
           {
@@ -551,7 +551,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Tormenta solar en declive', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             radiationDeclining: true,
           },
         ],
@@ -571,7 +571,7 @@ export const cutscenesData = {
       camera: 'cam-shake',
       sound: 'oxygen_vent',
       text: 'Fuga en conducto principal', // 4 palabras
-      sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+      sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
       oxygenJet: true,
       pressureGaugeDrop: true,
     },
@@ -587,7 +587,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'airlock_whoosh',
             text: 'Salida de reparación urgente', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             crewEVA: true,
           },
           {
@@ -597,7 +597,7 @@ export const cutscenesData = {
             camera: 'cam-pan-right',
             sound: 'manual_scrub',
             text: 'Parche colocado en conducto', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             patchPlaced: true,
           },
           {
@@ -607,7 +607,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'spark_shine',
             text: 'Soldadura hermética completa', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             detailView: 'welded_patch',
           },
           {
@@ -617,7 +617,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Presión de oxígeno normal', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             pressureRestored: true,
           },
         ],
@@ -633,7 +633,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'switch_click',
             text: 'Consola de presión ambiental', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             consoleView: true,
           },
           {
@@ -643,7 +643,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'switch_click',
             text: 'Regulación de presión hábitat', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             detailView: 'valve_dials',
           },
           {
@@ -653,7 +653,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'oxygen_vent',
             text: 'Presión estabilizada a 0.6', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             pressureGauge: 0.6,
           },
           {
@@ -663,7 +663,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Fuga contenida exitosamente', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             leakContained: true,
           },
         ],
@@ -679,7 +679,7 @@ export const cutscenesData = {
             camera: 'cam-pan-left',
             sound: 'footsteps',
             text: 'Depósito de tanques auxiliares', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             tanksDepot: true,
           },
           {
@@ -689,7 +689,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'airlock_whoosh',
             text: 'Mangueras auxiliares conectadas', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             detailView: 'tank_valves',
           },
           {
@@ -699,7 +699,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'oxygen_vent',
             text: 'Flujo de reserva activo', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             reserveActive: true,
           },
           {
@@ -709,7 +709,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Reserva de oxígeno conectada', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             oxygenSafe: true,
           },
         ],
@@ -729,7 +729,7 @@ export const cutscenesData = {
       camera: 'cam-shake',
       sound: 'alarm',
       text: 'Fisura en mamparo estructural', // 4 palabras
-      sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+      sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
       wallCrack: true,
       dustPuff: true,
       alarmKlaxon: true,
@@ -746,7 +746,7 @@ export const cutscenesData = {
             camera: 'cam-pan-right',
             sound: 'footsteps',
             text: 'Equipo epóxico de emergencia', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             crewEpoxy: true,
           },
           {
@@ -756,7 +756,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'steam',
             text: 'Inyección de resina química', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             injectingResin: true,
           },
           {
@@ -766,7 +766,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Resina epóxica fraguada', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             detailView: 'cured_epoxy',
           },
           {
@@ -776,7 +776,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Grieta sellada con resina', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             crackRepaired: true,
           },
         ],
@@ -792,7 +792,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'alarm',
             text: 'Alarma de despresurización', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             alarmBeacons: true,
           },
           {
@@ -802,7 +802,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'airlock_close',
             text: 'Mamparos herméticos bajando', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             bulkheadsClosing: true,
           },
           {
@@ -812,7 +812,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'switch_click',
             text: 'Bloqueo neumático cerrado', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             detailView: 'airlock_latch',
           },
           {
@@ -822,7 +822,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Compartimento aislado seguro', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             sectorIsolated: true,
           },
         ],
@@ -838,7 +838,7 @@ export const cutscenesData = {
             camera: 'cam-pan-left',
             sound: 'footsteps',
             text: 'Transportando placas de acero', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             carryingPlates: true,
           },
           {
@@ -848,7 +848,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'manual_scrub',
             text: 'Remachando placas metálicas', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             rivetingPlates: true,
           },
           {
@@ -858,7 +858,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'spark_shine',
             text: 'Soldadura estructural sólida', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             detailView: 'welded_plates',
           },
           {
@@ -868,7 +868,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Refuerzo estructural completado', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+            sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
             bracingComplete: true,
           },
         ],
@@ -888,7 +888,7 @@ export const cutscenesData = {
       camera: 'cam-pan-left',
       sound: 'beacon',
       text: 'Nave en aproximación final', // 4 palabras
-      sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+      sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
       skyShipOrbit: true,
       seekingSignal: true,
     },
@@ -904,7 +904,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'beacon',
             text: 'Antena orientándose al cielo', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             antennaTracking: true,
           },
           {
@@ -914,7 +914,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'beacon',
             text: 'Transmisión de telemetría continua', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             detailView: 'radio_waves',
           },
           {
@@ -924,7 +924,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Coordenadas fijadas en nave', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             pilotReceiving: true,
           },
           {
@@ -934,7 +934,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Trayectoria de descenso confirmada', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             shipAligned: true,
           },
         ],
@@ -950,7 +950,7 @@ export const cutscenesData = {
             camera: 'cam-pan-right',
             sound: 'switch_click',
             text: 'Baliza óptica de pista', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             beaconTurnOn: true,
           },
           {
@@ -960,7 +960,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'spark_shine',
             text: 'Luz de xenón encendida', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             detailView: 'beacon_strobe',
           },
           {
@@ -970,7 +970,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'beacon',
             text: 'Haz luminoso hacia órbita', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             verticalLightBeam: true,
           },
           {
@@ -980,7 +980,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Pista de aterrizaje visible', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             shipLandingPath: true,
           },
         ],
@@ -996,7 +996,7 @@ export const cutscenesData = {
             camera: 'cam-zoom-in',
             sound: 'switch_click',
             text: 'Sistemas combinados en línea', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             dualGuidanceReady: true,
           },
           {
@@ -1006,7 +1006,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'beacon',
             text: 'Enlace dual sincronizado', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+            sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
             detailView: 'dual_telemetry',
           },
           {
@@ -1016,7 +1016,7 @@ export const cutscenesData = {
             camera: 'cam-shake',
             sound: 'rover_motor',
             text: 'Nave en descenso guiado', // 4 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             shipRetroThrusters: true,
           },
           {
@@ -1026,7 +1026,7 @@ export const cutscenesData = {
             camera: 'cam-none',
             sound: 'spark_shine',
             text: 'Aterrizaje seguro completado', // 3 palabras
-            sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+            sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
             landingComplete: true,
           },
         ],
@@ -1034,3 +1034,4 @@ export const cutscenesData = {
     },
   },
 };
+

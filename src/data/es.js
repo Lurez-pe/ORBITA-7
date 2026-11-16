@@ -173,12 +173,12 @@ export const es = {
       time: 'HORA 00/72',
       title: 'Polvo en paneles solares', // 4 palabras
       alert: 'Tormenta activa. Polvo cubre paneles y la luz cae a nivel crítico.', // 11 palabras
-      sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+      sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
       options: [
         {
           id: 'A',
           title: 'Limpiar con rover', // 3 palabras
-          thumb: '/assets/ORB_OBJ_rover_lateral_v01.png',
+          thumb: 'assets/ORB_OBJ_rover_lateral_v01.png',
           effects: { energy: -8 },
           flag: 'var_paneles_limpios',
           flagValue: 1,
@@ -188,7 +188,7 @@ export const es = {
         {
           id: 'B',
           title: 'Salida exterior EVA', // 3 palabras
-          thumb: '/assets/ORB_PERS_tripulante_naranja.webp',
+          thumb: 'assets/ORB_PERS_tripulante_naranja.webp',
           effects: { life: -8, safety: -10 },
           flag: 'var_paneles_limpios',
           flagValue: 1,
@@ -198,7 +198,7 @@ export const es = {
         {
           id: 'C',
           title: 'Modo de ahorro', // 3 palabras
-          thumb: '/assets/ORB_UI_icono_energia_v01.jpg',
+          thumb: 'assets/ORB_UI_icono_energia_v01.jpg',
           effects: { energy: 5, safety: -5 },
           flag: 'var_modo_ahorro',
           flagValue: 1,
@@ -213,12 +213,12 @@ export const es = {
       time: 'HORA 12/72',
       title: 'Fallo extractor de hielo', // 4 palabras
       alert: 'Tubería congelada. Flujo de agua detenido y reservas en riesgo urgente.', // 10 palabras
-      sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+      sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
       options: [
         {
           id: 'A',
           title: 'Calentar la tubería', // 3 palabras
-          thumb: '/assets/ORB_OBJ_extractor_hielo_v01.png',
+          thumb: 'assets/ORB_OBJ_extractor_hielo_v01.png',
           effects: { energy: -12, supplies: 12 },
           flag: 'extractorRepaired',
           outcome: 'Tubería descongelada con calentador.',
@@ -227,7 +227,7 @@ export const es = {
         {
           id: 'B',
           title: 'Reciclar agua existente', // 3 palabras
-          thumb: '/assets/ORB_UI_soporte_vital.webp',
+          thumb: 'assets/ORB_UI_soporte_vital.webp',
           effects: { energy: 4, supplies: -5 },
           flag: 'recyclingActive',
           outcome: 'Reciclaje hídrico en marcha.',
@@ -236,7 +236,7 @@ export const es = {
         {
           id: 'C',
           title: 'Aislar tubería manualmente', // 3 palabras
-          thumb: '/assets/ORB_OBJ_kit_reparacion_v01.png',
+          thumb: 'assets/ORB_OBJ_kit_reparacion_v01.png',
           effects: { supplies: 4, safety: -4 },
           flag: 'waterRationed',
           outcome: 'Aislamiento colocado por tripulantes.',
@@ -250,12 +250,12 @@ export const es = {
       time: 'HORA 24/72',
       title: 'Alerta de radiación solar', // 4 palabras
       alert: 'Tormenta solar detectada. Radiación en superficie en niveles altamente peligrosos.', // 9 palabras
-      sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+      sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
       options: [
         {
           id: 'A',
           title: 'Evacuar al refugio', // 3 palabras
-          thumb: '/assets/ORB_ESC_refugio_v01.webp',
+          thumb: 'assets/ORB_ESC_refugio_v01.webp',
           effects: { life: 8, safety: -6 },
           flag: 'shelterActive',
           outcome: 'Tripulación protegida bajo tierra.',
@@ -264,7 +264,7 @@ export const es = {
         {
           id: 'B',
           title: 'Añadir blindaje regolito', // 3 palabras
-          thumb: '/assets/ORB_UI_proteccion.webp',
+          thumb: 'assets/ORB_UI_proteccion.webp',
           effects: { energy: -8, safety: 8 },
           flag: 'regolithShield',
           outcome: 'Regolito extra sobre cúpula.',
@@ -273,7 +273,7 @@ export const es = {
         {
           id: 'C',
           title: 'Continuar con monitoreo', // 3 palabras
-          thumb: '/assets/orbita7_alerta_radiacion.png',
+          thumb: 'assets/orbita7_alerta_radiacion.png',
           effects: { energy: 4, life: -10 },
           flag: 'monitoringOnly',
           outcome: 'Monitoreo activo sin resguardo.',
@@ -287,12 +287,12 @@ export const es = {
       time: 'HORA 36/72',
       title: 'Fuga de oxígeno', // 3 palabras
       alert: 'Fuga en conducto principal. Presión de oxígeno descendiendo rápidamente.', // 8 palabras
-      sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+      sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
       options: [
         {
           id: 'A',
           title: 'Sellar fuga exterior', // 3 palabras
-          thumb: '/assets/ORB_OBJ_modulo_oxigeno_v01.png',
+          thumb: 'assets/ORB_OBJ_modulo_oxigeno_v01.png',
           effects: { energy: -6, life: 10 },
           flag: 'var_reparacion_base',
           flagValue: 1,
@@ -302,7 +302,7 @@ export const es = {
         {
           id: 'B',
           title: 'Reducir presión hábitat', // 3 palabras
-          thumb: '/assets/ORB_UI_soporte_vital.webp',
+          thumb: 'assets/ORB_UI_soporte_vital.webp',
           effects: { energy: 4, safety: -6 },
           flag: 'pressureLowered',
           outcome: 'Presión interna reducida.',
@@ -311,7 +311,7 @@ export const es = {
         {
           id: 'C',
           title: 'Conectar tanques auxiliares', // 3 palabras
-          thumb: '/assets/ORB_OBJ_kit_reparacion_v01.png',
+          thumb: 'assets/ORB_OBJ_kit_reparacion_v01.png',
           effects: { supplies: -6, life: 6 },
           flag: 'auxO2Active',
           outcome: 'Tanques de reserva en línea.',
@@ -325,12 +325,12 @@ export const es = {
       time: 'HORA 48/72',
       title: 'Grieta en el refugio', // 4 palabras
       alert: 'Fisura estructural en refugio. Riesgo inminente de despresurización del hábitat.', // 9 palabras
-      sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+      sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
       options: [
         {
           id: 'A',
           title: 'Sellado epóxico rápido', // 3 palabras
-          thumb: '/assets/ORB_OBJ_kit_reparacion_v01.png',
+          thumb: 'assets/ORB_OBJ_kit_reparacion_v01.png',
           effects: { supplies: -8, safety: 10 },
           flag: 'epoxySeal',
           outcome: 'Fisura sellada con resina.',
@@ -339,7 +339,7 @@ export const es = {
         {
           id: 'B',
           title: 'Aislar sector dañado', // 3 palabras
-          thumb: '/assets/ORB_ESC_refugio_v01.webp',
+          thumb: 'assets/ORB_ESC_refugio_v01.webp',
           effects: { life: -6, safety: 6 },
           flag: 'bulkheadIsolated',
           outcome: 'Compuertas de sección cerradas.',
@@ -348,7 +348,7 @@ export const es = {
         {
           id: 'C',
           title: 'Reforzar con placas', // 3 palabras
-          thumb: '/assets/ORB_OBJ_modulo_oxigeno_v01.png',
+          thumb: 'assets/ORB_OBJ_modulo_oxigeno_v01.png',
           effects: { energy: -8, safety: 8 },
           flag: 'plateBracing',
           outcome: 'Placas metálicas soldadas.',
@@ -362,12 +362,12 @@ export const es = {
       time: 'HORA 60/72',
       title: 'Guiado nave de suministros', // 4 palabras
       alert: 'Nave en aproximación final. Se requiere baliza activa para aterrizar.', // 10 palabras
-      sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+      sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
       options: [
         {
           id: 'A',
           title: 'Guiar por radio', // 3 palabras
-          thumb: '/assets/ORB_PERS_tripulante_antena.webp',
+          thumb: 'assets/ORB_PERS_tripulante_antena.webp',
           effects: { energy: -10 },
           flag: 'var_comunicaciones',
           flagValue: 1,
@@ -377,7 +377,7 @@ export const es = {
         {
           id: 'B',
           title: 'Encender baliza visual', // 3 palabras
-          thumb: '/assets/ORB_OBJ_baliza_v01.png',
+          thumb: 'assets/ORB_OBJ_baliza_v01.png',
           effects: { energy: -8, safety: 8 },
           flag: 'var_zona_aterrizaje',
           flagValue: 1,
@@ -387,7 +387,7 @@ export const es = {
         {
           id: 'C',
           title: 'Guiado combinado doble', // 3 palabras
-          thumb: '/assets/ORB_MAP_alpha7.webp',
+          thumb: 'assets/ORB_MAP_alpha7.webp',
           effects: { energy: -16, safety: 10 },
           flag: 'dualGuidance',
           flagValue: 1,
@@ -630,3 +630,4 @@ export const es = {
     m6C: 'Guiado dual',
   },
 };
+
