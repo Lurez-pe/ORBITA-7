@@ -1,28 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
-  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Press Start 2P', monospace, sans-serif;
   color: #eff0f7;
   background: #080a18;
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  text-rendering: pixelated;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
 
-  --ink: #080a18;
-  --panel: #0e1124;
-  --panel2: #141832;
-  --panel-border: rgba(142, 155, 230, 0.18);
-  --line: rgba(208, 214, 255, 0.12);
-  --muted: #8c90ad;
-  --white: #f5f4fa;
-  --pink: #fe007a;
-  --cyan: #55d6c2;
-  --orange: #f28b4b;
-  --gold: #f4d36c;
-  --purple: #a899ff;
-  --green: #4ade80;
-  --red: #f87171;
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-terminal: 'VT323', monospace;
+
+  --pixel-green: #00ff66;
+  --pixel-yellow: #ffd700;
+  --pixel-red: #ff2244;
+  --pixel-cyan: #39e6d4;
+  --pixel-orange: #ff7733;
+  --pixel-border: #4a5585;
+  --pixel-bg: #090c1a;
+  --pixel-card: #13172e;
+}
+
+img, canvas, svg {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 * {
