@@ -18,6 +18,14 @@ npm run build
 npm run preview
 ```
 
+## GitHub Pages
+
+El despliegue compila Vite mediante `.github/workflows/deploy.yml`. En GitHub, configura **Settings → Pages → Build and deployment → Source: GitHub Actions**. La compilación de producción usa la base `/ORBITA-7/`, correspondiente a la URL de proyecto `https://lurez-pe.github.io/ORBITA-7/`; los recursos gráficos se resuelven de forma relativa a esa ruta.
+
+## Contribuir
+
+El flujo recomendado para colaborar está en [`CONTRIBUTING.md`](CONTRIBUTING.md). Los cambios se trabajan en una rama y se integran a `main` mediante pull request; cada merge a `main` vuelve a desplegar GitHub Pages.
+
 ## Datos y NASA
 
 - La aplicación consulta la NASA Image and Video Library API para buscar imágenes relacionadas con la misión actual. No requiere una clave API; cada resultado enlaza a su ficha de NASA Images y muestra centro y fecha cuando están disponibles.
@@ -32,3 +40,4 @@ Las copias para la web están en `public/assets/`; los originales organizados en
 ## Estado
 
 MVP en desarrollo: menú interactivo, seis misiones con escenas específicas, HUD ilustrado, tripulación y objetos animados, acciones visuales por decisión, pausa con ajustes, informe/continuar, resultados, reinicio, reservas de un uso, protocolo de bienestar y archivo NASA plegable. Incluye respeto por `prefers-reduced-motion`. Balance de la matriz v2 aún provisional. La compilación de producción se verifica con `npm run build`.
+
