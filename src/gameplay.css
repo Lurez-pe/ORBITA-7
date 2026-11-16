@@ -1559,3 +1559,899 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* =========================================================================
+   PANTALLA FINAL DE MISIÓN (RESULT SCREEN) PIXEL ART RETRO
+   - DISEÑO EN CUADRÍCULA CON ESPACIADO UNIFORME
+   - UNA SOLA JERARQUÍA (TÍTULO GRANDE, SECCIONES MEDIANAS, DETALLES PEQUEÑOS)
+   - DESPLAZABLE EN PANTALLAS PEQUEÑAS (overflow-y: auto)
+   - ANIMACIÓN DE ENTRADA POR BLOQUES UNO TRAS OTRO (steps())
+   ========================================================================= */
+
+.result-screen-layout {
+  min-height: 100vh;
+  width: 100%;
+  background: #060814;
+  color: #eff0f7;
+  font-family: var(--font-pixel, monospace);
+  overflow-y: auto;
+  max-height: 100vh;
+  padding: clamp(16px, 3vw, 36px) 16px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.result-content-container {
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Animación de entrada por bloques, uno tras otro */
+@keyframes result-block-enter {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.result-block-1 { animation: result-block-enter 0.35s steps(4) both 0.05s; }
+.result-block-2 { animation: result-block-enter 0.35s steps(4) both 0.18s; }
+.result-block-3 { animation: result-block-enter 0.35s steps(4) both 0.30s; }
+.result-block-4 { animation: result-block-enter 0.35s steps(4) both 0.42s; }
+.result-block-5 { animation: result-block-enter 0.35s steps(4) both 0.54s; }
+.result-block-6 { animation: result-block-enter 0.35s steps(4) both 0.66s; }
+
+/* SECCIONES UNIFORMES */
+.result-section {
+  background: #0d1228;
+  border: 3px solid #1f274e;
+  box-shadow: 4px 4px 0 #000;
+  padding: 14px 18px;
+  box-sizing: border-box;
+}
+
+.section-title-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #1a2244;
+  padding-bottom: 6px;
+}
+
+.strip-num {
+  background: #39e6d4;
+  color: #000;
+  font-size: 8px;
+  padding: 2px 6px;
+  font-weight: 900;
+  border: 1px solid #000;
+}
+
+.strip-label {
+  font-size: 9px;
+  color: #ffd700;
+  letter-spacing: 0.5px;
+}
+
+/* =========================================================================
+   1. CABECERA: TÍTULO GRANDE, ILUSTRACIÓN PIXEL ART, ESTRELLAS, FRASE
+   ========================================================================= */
+.header-block {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ending-tag-badge {
+  font-size: 9px;
+  padding: 4px 8px;
+  border: 2px solid #000;
+  font-weight: 900;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.tag--gold { background: #ffd700; color: #000; }
+.tag--yellow { background: #ffea00; color: #000; }
+.tag--cyan { background: #39e6d4; color: #000; }
+.tag--red { background: #ff2244; color: #fff; }
+
+.ending-stars-row {
+  display: flex;
+  gap: 4px;
+}
+
+.star-pixel {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.star-pixel.is-filled {
+  color: #ffd700;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.star-pixel.is-empty {
+  color: #222a50;
+}
+
+.ending-main-title {
+  font-size: clamp(16px, 2.8vw, 22px);
+  color: #fff;
+  margin: 4px 0;
+  letter-spacing: 1px;
+  line-height: 1.3;
+}
+
+/* Ilustración pixel art enmarcada */
+.header-illustration-wrapper {
+  width: 100%;
+  max-width: 620px;
+  height: clamp(150px, 22vh, 210px);
+  margin: 4px 0;
+}
+
+.ending-art-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #000;
+  background: #060914;
+}
+
+.ending-art-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 65%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Efectos visuales de cada ilustración */
+.ending-beacon-beam-gold {
+  position: absolute;
+  left: 17%;
+  bottom: 22%;
+  width: 8px;
+  height: 100%;
+  background: #ffd700;
+  opacity: 0.85;
+  box-shadow: 0 0 12px #ffd700;
+  z-index: 4;
+}
+
+.ending-beacon-obj {
+  position: absolute;
+  left: 15%;
+  bottom: 12%;
+  height: 42px;
+  width: auto;
+  image-rendering: pixelated;
+  z-index: 5;
+}
+
+.ending-ship-landed {
+  position: absolute;
+  left: 48%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 6;
+}
+
+.ending-ship-img {
+  height: clamp(65px, 10vw, 95px);
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.landing-gear-pads {
+  width: 65px;
+  height: 5px;
+  background: #000;
+  border: 1px solid #39e6d4;
+  margin-top: -2px;
+}
+
+.ending-crew-celebrating {
+  position: absolute;
+  right: 18%;
+  bottom: 12%;
+  display: flex;
+  gap: 6px;
+  z-index: 7;
+}
+
+.ending-crew-sprite {
+  height: clamp(55px, 8vw, 75px);
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.ending-glints-gold {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 48% 60%, rgba(255, 215, 0, 0.25) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 8;
+}
+
+/* Final B art */
+.ending-sky-dusty {
+  position: absolute;
+  inset: 0;
+  background: rgba(184, 85, 42, 0.45);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.ending-beacon-beam-yellow {
+  position: absolute;
+  left: 17%;
+  bottom: 22%;
+  width: 6px;
+  height: 100%;
+  background: #ffea00;
+  opacity: 0.6;
+  z-index: 4;
+  animation: dot-step-blink 0.8s steps(2) infinite;
+}
+
+.ending-ship-rough {
+  position: absolute;
+  left: 48%;
+  bottom: 10%;
+  transform: translateX(-50%) rotate(-4deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 6;
+}
+
+.dust-puff-cloud {
+  width: 90px;
+  height: 14px;
+  background: #b8552a;
+  border: 1px solid #000;
+  margin-top: -6px;
+  opacity: 0.85;
+}
+
+.ending-crew-standing {
+  position: absolute;
+  right: 22%;
+  bottom: 10%;
+  z-index: 7;
+}
+
+/* Final C art */
+.ending-space-canvas {
+  position: absolute;
+  inset: 0;
+  background: #02040c;
+  z-index: 1;
+}
+
+.space-star-field {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(#fff 1px, transparent 1px),
+    radial-gradient(#ffd700 1px, transparent 1px);
+  background-size: 24px 24px, 48px 48px;
+  opacity: 0.6;
+}
+
+.mars-horizon-curve {
+  position: absolute;
+  bottom: -40px;
+  left: -10%;
+  right: -10%;
+  height: 100px;
+  background: #8b321a;
+  border-top: 3px solid #ff7700;
+  border-radius: 50% 50% 0 0;
+}
+
+.ending-ship-in-orbit {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 6;
+  animation: cam-pan-left-step 3s steps(6) infinite alternate;
+}
+
+.ending-ship-orbit-img {
+  height: 70px;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.orbit-telemetry-loss-tag {
+  font-size: 7px;
+  background: #ff2244;
+  color: #fff;
+  padding: 2px 6px;
+  border: 1px solid #000;
+  animation: dot-step-blink 0.6s steps(2) infinite;
+}
+
+.ending-ground-silhouette {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 7;
+}
+
+.ending-beacon-dark {
+  height: 32px;
+  filter: brightness(0.2);
+  image-rendering: pixelated;
+}
+
+/* Final D art */
+.ending-emergency-grid {
+  position: absolute;
+  inset: 0;
+  background: #140408;
+  display: grid;
+  place-items: center;
+}
+
+.emergency-red-flash-layer {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 34, 68, 0.25);
+  animation: dot-step-blink 0.5s steps(2) infinite;
+}
+
+.emergency-siren-center {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.emergency-badge-img {
+  height: 70px;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.emergency-critical-tag {
+  font-size: 9px;
+  background: #ff2244;
+  color: #fff;
+  padding: 3px 8px;
+  border: 2px solid #fff;
+  font-weight: 900;
+}
+
+/* Frase de cabecera máx 12 palabras */
+.ending-phrase-text {
+  font-size: 11px;
+  color: #ffd700;
+  line-height: 1.5;
+  max-width: 680px;
+  background: #080b1a;
+  border: 2px solid #ffd700;
+  padding: 8px 14px;
+  margin: 0;
+}
+
+/* =========================================================================
+   2. INDICADORES: 4 ICONOS EN FILA, 80 → FINAL, BARRA COLOR
+   ========================================================================= */
+.result-indicators-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.res-indicator-card {
+  background: #131834;
+  border: 2px solid #000;
+  box-shadow: 2px 2px 0 #000;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.res-card-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.res-card-icon {
+  font-size: 16px;
+}
+
+.res-card-name {
+  font-size: 8px;
+  color: #bac0d8;
+  letter-spacing: 0.5px;
+}
+
+.res-card-values {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.val-init {
+  font-size: 11px;
+  color: #6f78a0;
+}
+
+.val-arrow {
+  font-size: 9px;
+  color: #39e6d4;
+}
+
+.val-final {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.val-final.state--green { color: #00ff66; }
+.val-final.state--yellow { color: #ffd700; }
+.val-final.state--red { color: #ff2244; }
+
+.res-card-bar {
+  display: flex;
+  gap: 2px;
+  height: 10px;
+  background: #060914;
+  border: 1px solid #000;
+  padding: 1px;
+}
+
+.bar-seg {
+  flex: 1;
+  height: 100%;
+  background: #1a2244;
+}
+
+.res-card-bar.state--green .bar-seg.is-filled { background: #00ff66; }
+.res-card-bar.state--yellow .bar-seg.is-filled { background: #ffd700; }
+.res-card-bar.state--red .bar-seg.is-filled { background: #ff2244; }
+
+/* =========================================================================
+   3. LÍNEA DE TIEMPO: 6 FILAS, MEJOR VERDE, PEOR ROJO
+   ========================================================================= */
+.timeline-table-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.timeline-row-item {
+  display: grid;
+  grid-template-columns: 44px 1.5fr 75px 1.2fr 130px;
+  align-items: center;
+  gap: 8px;
+  background: #121730;
+  border: 2px solid #222b54;
+  padding: 6px 10px;
+  box-sizing: border-box;
+}
+
+.timeline-row-item.row--best {
+  border-color: #00ff66;
+  background: #0e241c;
+  box-shadow: 0 0 0 2px #00ff66;
+}
+
+.timeline-row-item.row--worst {
+  border-color: #ff2244;
+  background: #240e16;
+  box-shadow: 0 0 0 2px #ff2244;
+}
+
+.pixel-badge-m {
+  background: #1f274e;
+  color: #fff;
+  font-size: 8px;
+  padding: 3px 5px;
+  border: 1px solid #000;
+  font-weight: 900;
+}
+
+.col-mission-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mission-name-text {
+  font-size: 9px;
+  color: #fff;
+}
+
+.mission-time-tag {
+  font-size: 7px;
+  color: #ffd700;
+}
+
+.option-choice-badge {
+  font-size: 8px;
+  background: #ff2244;
+  color: #fff;
+  padding: 2px 6px;
+  border: 1px solid #000;
+  font-weight: 900;
+  text-align: center;
+  display: inline-block;
+}
+
+.option-choice-badge.not-played {
+  background: #333a5c;
+  color: #8892b0;
+}
+
+.col-effects-pills {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.effect-tag-pixel {
+  font-size: 8px;
+  padding: 2px 5px;
+  border: 1px solid #000;
+  font-weight: 900;
+}
+
+.effect-tag-pixel.gain { background: #00ff66; color: #000; }
+.effect-tag-pixel.loss { background: #ff2244; color: #fff; }
+
+.no-change-tag {
+  font-size: 7px;
+  color: #6f78a0;
+}
+
+.col-badge-eval {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.eval-badge {
+  font-size: 7px;
+  padding: 3px 6px;
+  border: 1px solid #000;
+  font-weight: 900;
+  text-align: center;
+}
+
+.eval-badge.best {
+  background: #00ff66;
+  color: #000;
+}
+
+.eval-badge.worst {
+  background: #ff2244;
+  color: #fff;
+}
+
+/* =========================================================================
+   4. ESTADO DE LA MISIÓN: 3 ICONOS CON ✔ O ✘
+   ========================================================================= */
+.mission-flags-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.flag-card {
+  padding: 10px;
+  border: 2px solid #000;
+  box-shadow: 2px 2px 0 #000;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.flag-card.is-ok {
+  background: #0c201a;
+  border-color: #00ff66;
+}
+
+.flag-card.is-fail {
+  background: #240c14;
+  border-color: #ff2244;
+}
+
+.flag-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flag-icon {
+  font-size: 18px;
+}
+
+.flag-status-symbol {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.flag-card.is-ok .flag-status-symbol { color: #00ff66; }
+.flag-card.is-fail .flag-status-symbol { color: #ff2244; }
+
+.flag-name {
+  font-size: 9px;
+  color: #fff;
+}
+
+.flag-desc {
+  font-size: 8px;
+}
+
+.flag-card.is-ok .flag-desc { color: #00ff66; }
+.flag-card.is-fail .flag-desc { color: #ff2244; }
+
+/* =========================================================================
+   5. APRENDIZAJES: MÁXIMO 3 TARJETAS DE UNA FRASE CADA UNA
+   ========================================================================= */
+.lessons-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.lesson-pixel-card {
+  background: #131834;
+  border: 2px solid #ffd700;
+  box-shadow: 2px 2px 0 #000;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lesson-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lesson-card-badge {
+  font-size: 7px;
+  background: #39e6d4;
+  color: #000;
+  padding: 2px 4px;
+  font-weight: 900;
+}
+
+.lesson-card-num {
+  font-size: 8px;
+  color: #ffd700;
+}
+
+.lesson-card-phrase {
+  font-size: 9px;
+  color: #fff;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* =========================================================================
+   6. BOTONES GRANDES: JUGAR DE NUEVO Y VER LAS OTRAS RUTAS
+   ========================================================================= */
+.actions-block {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 6px 0;
+}
+
+.big-pixel-btn {
+  flex: 1;
+  max-width: 380px;
+  padding: 14px 18px;
+  border: 3px solid #fff;
+  box-shadow: 4px 4px 0 #000;
+  font-family: var(--font-pixel, monospace);
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.big-pixel-btn.btn-restart {
+  background: #00ff66;
+  color: #000;
+}
+
+.big-pixel-btn.btn-restart:hover {
+  background: #39e6d4;
+  border-color: #000;
+}
+
+.big-pixel-btn.btn-routes {
+  background: #ffd700;
+  color: #000;
+}
+
+.big-pixel-btn.btn-routes:hover {
+  background: #ff2244;
+  color: #fff;
+  border-color: #000;
+}
+
+/* =========================================================================
+   MODAL DE LAS OTRAS RUTAS Y FINALES
+   ========================================================================= */
+.pixel-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 6, 16, 0.88);
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.pixel-modal-content {
+  background: #0d1228;
+  border: 4px solid #39e6d4;
+  box-shadow: 6px 6px 0 #000;
+  max-width: 720px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.modal-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #222b54;
+  padding-bottom: 8px;
+  gap: 8px;
+}
+
+.modal-badge {
+  font-size: 8px;
+  background: #39e6d4;
+  color: #000;
+  padding: 2px 6px;
+  font-weight: 900;
+}
+
+.modal-title {
+  font-size: 12px;
+  color: #ffd700;
+  margin: 0;
+  flex: 1;
+}
+
+.routes-list-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.route-detail-card {
+  background: #141a38;
+  border: 2px solid #222b54;
+  padding: 10px 12px;
+  box-sizing: border-box;
+}
+
+.route--a { border-color: #ffd700; }
+.route--b { border-color: #ffea00; }
+.route--c { border-color: #39e6d4; }
+.route--d { border-color: #ff2244; }
+
+.route-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+.route-name {
+  font-size: 9px;
+  color: #fff;
+}
+
+.route-req-tag {
+  font-size: 7px;
+  background: #000;
+  color: #ffd700;
+  padding: 2px 5px;
+  border: 1px solid #3d4a78;
+}
+
+.route-text {
+  font-size: 9px;
+  color: #bac0d8;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.modal-footer-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* =========================================================================
+   RESPONSIVIDAD DE LA PANTALLA FINAL
+   ========================================================================= */
+@media (max-width: 860px) {
+  .result-indicators-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .timeline-row-item {
+    grid-template-columns: 36px 1fr 65px;
+    grid-template-areas:
+      "num name opt"
+      "effects effects eval";
+    gap: 6px;
+  }
+  .col-mission-num { grid-area: num; }
+  .col-mission-name { grid-area: name; }
+  .col-option-choice { grid-area: opt; }
+  .col-effects-pills { grid-area: effects; }
+  .col-badge-eval { grid-area: eval; }
+
+  .mission-flags-grid {
+    grid-template-columns: 1fr;
+  }
+  .lessons-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .actions-block {
+    flex-direction: column;
+  }
+  .big-pixel-btn {
+    max-width: 100%;
+  }
+}

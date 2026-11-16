@@ -27,6 +27,7 @@ import {
 import { cutscenesData } from './data/cutscenes.js';
 import { CutscenePlayer } from './components/CutscenePlayer.jsx';
 import { ActionPictogram } from './components/ActionPictogram.jsx';
+import { ResultScreen } from './components/ResultScreen.jsx';
 
 // =========================================================================
 // 1. BARRA SUPERIOR (HUD) REDISEÑADA: 4 BLOQUES GRANDES (MÍNIMO 64PX)
@@ -439,43 +440,6 @@ function IntroScreen({ onStart, lang, setLang }) {
   );
 }
 
-// =========================================================================
-// PANTALLA DE RESULTADOS / FINALES
-// =========================================================================
-function ResultScreen({ game, onRestart, lang }) {
-  const ending = (endingsData[lang] ?? endingsData.es)[game.result] ?? (endingsData[lang] ?? endingsData.es).finalA;
-  const meta = resourceMeta[lang] ?? resourceMeta.es;
-
-  return (
-    <main className="result-screen">
-      <div className="result-panel">
-        <span className="eyebrow">{ending.tag}</span>
-        <h1>{ending.title}</h1>
-        <p>{ending.text}</p>
-
-        <div className="result-stats">
-          {Object.entries(game.resources).map(([key, value]) => (
-            <div key={key}>
-              <span>{meta[key]?.icon} {meta[key]?.label ?? key}</span>
-              <b>{value}/100</b>
-            </div>
-          ))}
-        </div>
-
-        <button
-          className="primary-button"
-          onClick={() => {
-            soundConfirm();
-            onRestart();
-          }}
-          onMouseEnter={soundHover}
-        >
-          REINICIAR SIMULACIÓN <span>↻</span>
-        </button>
-      </div>
-    </main>
-  );
-}
 
 // =========================================================================
 // COMPONENTE PRINCIPAL (ORBITA-7)
@@ -632,7 +596,14 @@ export default function App() {
   }
 
   if (game.phase === 'result') {
-    return <ResultScreen game={game} onRestart={handleRestart} lang={lang} />;
+    return (
+      <ResultScreen
+        game={game}
+        missions={missions}
+        onRestart={handleRestart}
+        lang={lang}
+      />
+    );
   }
 
   const isCleaned =

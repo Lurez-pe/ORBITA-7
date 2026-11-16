@@ -470,6 +470,29 @@ export function soundBeacon() {
   } catch {}
 }
 
+// 11. Fanfarria de entrada para pantalla final
+export function soundResultsEntrance() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const notes = [440, 554.37, 659.25, 880, 1108.73]; // A major arpeggio ascendente
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+      gain.gain.setValueAtTime(0.06, now + idx * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + idx * 0.08);
+      osc.stop(now + idx * 0.08 + 0.35);
+    });
+  } catch {}
+}
+
 // Despachador de sonido procedural para cutscenes
 export function playCutsceneSound(soundName) {
   if (!soundName) return;

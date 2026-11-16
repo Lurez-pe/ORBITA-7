@@ -77,6 +77,7 @@ export function chooseOption(game, mission, option) {
         optionId: option.id,
         title: option.title,
         effects: option.effects,
+        lesson: option.lesson,
       },
     ],
   };
