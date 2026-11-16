@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './gameplay.css';
 import {
   baseTurnConsumption,
@@ -28,11 +28,13 @@ import { cutscenesData } from './data/cutscenes.js';
 import { CutscenePlayer } from './components/CutscenePlayer.jsx';
 import { ActionPictogram } from './components/ActionPictogram.jsx';
 import { ResultScreen } from './components/ResultScreen.jsx';
+import { LanguageSelector } from './components/LanguageSelector.jsx';
+import { getLocale, getSavedLanguage, saveLanguage } from './data/i18n.js';
 
 // =========================================================================
 // 1. BARRA SUPERIOR (HUD) REDISEÑADA: 4 BLOQUES GRANDES (MÍNIMO 64PX)
 // =========================================================================
-function HUDTopBar({ game, missions, meta, lang, setLang, onRestart, deltas }) {
+function HUDTopBar({ game, missions, meta, lang, setLang, onRestart, deltas, t }) {
   const [soundActive, setSoundActive] = useState(isSoundEnabled);
   const mission = missions[game.turn] ?? missions[0];
 
@@ -45,8 +47,8 @@ function HUDTopBar({ game, missions, meta, lang, setLang, onRestart, deltas }) {
       {/* Meta de la misión y reloj 12/72 */}
       <div className="hud-meta-group">
         <div className="hud-brand-pixel">
-          <span className="brand-badge">O7</span>
-          <b className="brand-text">ORBITA-7</b>
+          <span className="brand-badge">{t.hud.brandBadge}</span>
+          <b className="brand-text">{t.hud.brandName}</b>
         </div>
         <div className="hud-clock-box">
           <div className="clock-main-line">
@@ -54,7 +56,7 @@ function HUDTopBar({ game, missions, meta, lang, setLang, onRestart, deltas }) {
             <span>T{game.turn + 1}/6</span>
           </div>
           {/* 6 Puntos de Turno Visibles */}
-          <div className="clock-turn-dots" title={`Turno ${game.turn + 1} de 6`}>
+          <div className="clock-turn-dots" title={t.hud.turnTitle(game.turn + 1)}>
             {Array.from({ length: 6 }, (_, i) => (
               <span
                 key={i}
@@ -95,9 +97,9 @@ function HUDTopBar({ game, missions, meta, lang, setLang, onRestart, deltas }) {
               <div className="block-header-row">
                 <div className="block-title-group">
                   <span className="block-icon-sprite">
-                    <img src={itemMeta.image} alt="" />
+                    <img src={itemMeta?.image} alt="" />
                   </span>
-                  <span className="block-name">{itemMeta.label}</span>
+                  <span className="block-name">{t.resources[key]?.label ?? itemMeta?.label}</span>
                 </div>
                 <b className="block-num">{value}</b>
               </div>
@@ -116,17 +118,11 @@ function HUDTopBar({ game, missions, meta, lang, setLang, onRestart, deltas }) {
         })}
       </div>
 
-      {/* Controles de juego */}
+      {/* Controles de juego con selector de idioma pixel art (EN | ES) */}
       <div className="hud-buttons-col">
-        <button
-          className="pixel-btn-sm"
-          onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-          title="Idioma"
-        >
-          🌐 {lang.toUpperCase()}
-        </button>
-        <button className="pixel-btn-sm" onClick={handleToggleSound} title="Sonido">
-          {soundActive ? '🔊 ON' : '🔇 OFF'}
+        <LanguageSelector currentLang={lang} onChangeLang={setLang} />
+        <button className="pixel-btn-sm" onClick={handleToggleSound} title={t.hud.soundTitle}>
+          {soundActive ? t.hud.soundOn : t.hud.soundOff}
         </button>
         <button
           className="pixel-btn-sm btn--danger"
@@ -134,9 +130,9 @@ function HUDTopBar({ game, missions, meta, lang, setLang, onRestart, deltas }) {
             soundClick();
             onRestart();
           }}
-          title="Reiniciar"
+          title={t.hud.restartTitle}
         >
-          ↻ REINICIAR
+          {t.hud.restart}
         </button>
       </div>
     </header>
@@ -146,42 +142,42 @@ function HUDTopBar({ game, missions, meta, lang, setLang, onRestart, deltas }) {
 // =========================================================================
 // 2. ESCENARIO VISUAL PIXEL ART ESTÁTICO DE BASE ALPHA-7
 // =========================================================================
-function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause }) {
+function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause, t }) {
   const lightsState = energy > 60 ? 'on' : energy >= 30 ? 'flicker' : 'blackout';
   const skyLight = 30;
   const dustVal = isCleaned ? 0 : 85;
   const powerOutput = isCleaned ? 30 : 12;
 
   return (
-    <section className="pixel-stage-wrapper" aria-label="Escenario Base Alpha-7">
+    <section className="pixel-stage-wrapper" aria-label={t.hud.baseLocation}>
       <img
         src={mission.sceneBg ?? '/assets/ORB_ESC_base_exterior_v01.jpg'}
         className="pixel-stage-bg"
-        alt="Escenario marciano"
+        alt=""
       />
 
       <div className="pixel-storm-sky-overlay" />
-      <div className="pixel-sun-marker" title="Sol atenuado por tormenta" />
+      <div className="pixel-sun-marker" title={t.stage.sunTitle} />
 
       {/* Telemetría retro en pantalla */}
       <div className="pixel-stage-hud-bar">
         <span className="stage-hud-stat">
-          CIELO: <b>{skyLight}% LUZ</b> (TORMENTA)
+          {t.stage.skyLight(skyLight)}
         </span>
         <span className={`stage-hud-stat ${isCleaned ? 'stat-clean' : 'stat-dirty'}`}>
-          POLVO EN PANELES: <b>{dustVal}%</b>
+          {t.stage.dustStatus(dustVal)}
         </span>
         <span className={`stage-hud-stat ${isCleaned ? 'stat-clean' : 'stat-dirty'}`}>
-          SALIDA SOLAR: <b>{powerOutput}%</b>
+          {t.stage.solarOutput(powerOutput)}
         </span>
         {onReplayCause && (
           <button
             className="pixel-btn-sm"
             style={{ marginLeft: 'auto', padding: '2px 6px', fontSize: '7px' }}
             onClick={onReplayCause}
-            title="Ver plano de causa nuevamente"
+            title={t.stage.viewCauseTitle}
           >
-            👁️ VER CAUSA
+            {t.stage.viewCause}
           </button>
         )}
       </div>
@@ -192,7 +188,7 @@ function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause }) 
         <span className="pixel-light-square" />
         <span className="pixel-light-square" />
       </div>
-      {energy < 30 && <div className="pixel-dome-red-beacon" title="Alerta roja en cúpula" />}
+      {energy < 30 && <div className="pixel-dome-red-beacon" title={t.stage.domeBeaconTitle} />}
 
       {/* Matriz de paneles solares */}
       <div className="pixel-panels-unit">
@@ -200,19 +196,20 @@ function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause }) 
           <img
             src="/assets/ORB_OBJ_panel_solar_v01.png"
             className="pixel-panel-img"
-            alt="Paneles solares"
+            alt=""
           />
           <div className={`pixel-dust-blanket ${isCleaned ? 'is-cleared' : ''}`} />
           {!isCleaned && (
             <div className="pixel-panel-alert">
               <img
                 src="/assets/orbita7_alerta_tormenta_de_polvo_v3.png"
-                alt="Alerta de polvo"
+                alt=""
+                title={t.stage.panelAlertTitle}
               />
             </div>
           )}
         </div>
-        <span className="pixel-unit-tag">PANELES FOTOVOLTAICOS</span>
+        <span className="pixel-unit-tag">{t.stage.unitPanels}</span>
       </div>
 
       {/* Rover autónomo */}
@@ -220,9 +217,9 @@ function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause }) 
         <img
           src="/assets/ORB_OBJ_rover_lateral_v01.png"
           className="pixel-rover-img"
-          alt="Rover Alpha-7"
+          alt=""
         />
-        <span className="pixel-unit-tag">ROVER A-7</span>
+        <span className="pixel-unit-tag">{t.stage.unitRover}</span>
       </div>
 
       {/* Astronautas con traje y casco */}
@@ -230,16 +227,16 @@ function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause }) 
         <div className="astronaut-sprites-row">
           <img
             src="/assets/ORB_PERS_tripulante_lider.webp"
-            alt="Comandante EVA"
-            title="Astronauta Líder con traje y casco"
+            alt=""
+            title={t.stage.crewCommanderTitle}
           />
           <img
             src="/assets/ORB_PERS_tripulante_naranja.webp"
-            alt="Especialista EVA"
-            title="Astronauta EVA con traje y casco"
+            alt=""
+            title={t.stage.crewSpecialistTitle}
           />
         </div>
-        <span className="pixel-unit-tag">TRIPULACIÓN EVA</span>
+        <span className="pixel-unit-tag">{t.stage.unitCrew}</span>
       </div>
     </section>
   );
@@ -259,12 +256,18 @@ function DecisionConsole({
   onSelectOption,
   onReplayCutscene,
   onAdvance,
+  t,
 }) {
+  // Lección resuelta dinámicamente para que al alternar idioma se actualice al instante
+  const currentLesson =
+    mission.options?.find((o) => o.id === report?.optionId)?.lesson ||
+    report?.lesson;
+
   return (
     <footer className="pixel-decision-console" aria-label="Consola de decisiones">
       {/* Cabecera S.T.A.R. con directiva corta (máx 12 palabras) */}
       <div className="pixel-console-header">
-        <span className="console-star-tag">S.T.A.R. // MISIÓN {mission.id}</span>
+        <span className="console-star-tag">{t.console.starHeader(mission.id)}</span>
         <b className="console-directive-text">{mission.alert}</b>
       </div>
 
@@ -285,7 +288,7 @@ function DecisionConsole({
                 onMouseEnter={soundHover}
                 role="button"
                 tabIndex={0}
-                title={`Opción ${option.id}: ${option.title}`}
+                title={`${option.id}: ${option.title}`}
               >
                 {/* 1. Letra + Nombre de máximo 3 palabras */}
                 <div className="card-top-row">
@@ -295,7 +298,7 @@ function DecisionConsole({
 
                 {/* 2. Pictograma pixel art grande animado en hover */}
                 <div className="card-pictogram-box">
-                  <ActionPictogram missionId={mission.id} optionId={option.id} />
+                  <ActionPictogram missionId={mission.id} optionId={option.id} t={t} />
                 </div>
 
                 {/* 3. Efectos: Icono + Número únicamente */}
@@ -319,7 +322,7 @@ function DecisionConsole({
           {/* Resumen numérico */}
           <div className="report-numbers-strip">
             <div className="num-col">
-              <span className="num-col-title">DECISIÓN:</span>
+              <span className="num-col-title">{t.console.decisionLabel}</span>
               <div className="num-pills-row">
                 {Object.entries(decisionEffect ?? {}).map(([resKey, val]) => (
                   <span key={resKey} className={`effect-chip-pixel ${val >= 0 ? 'gain' : 'loss'}`}>
@@ -330,7 +333,7 @@ function DecisionConsole({
             </div>
 
             <div className="num-col">
-              <span className="num-col-title">CONSUMO BASE:</span>
+              <span className="num-col-title">{t.console.baseConsumptionLabel}</span>
               <div className="num-pills-row">
                 <span className="effect-chip-pixel loss">⚡ -5</span>
                 <span className="effect-chip-pixel loss">🫁 -3</span>
@@ -341,8 +344,8 @@ function DecisionConsole({
 
           {/* Lección única (máximo 15 palabras) */}
           <div className="report-lesson-pixel-box">
-            <span className="lesson-header">LECCIÓN:</span>
-            <p className="lesson-single-phrase">{report?.lesson}</p>
+            <span className="lesson-header">{t.console.lessonHeader}</span>
+            <p className="lesson-single-phrase">{currentLesson}</p>
           </div>
 
           {/* Controles: Ver de nuevo + Continuar */}
@@ -354,9 +357,9 @@ function DecisionConsole({
                 onReplayCutscene();
               }}
               onMouseEnter={soundHover}
-              title="Volver a ver la cinemática de este turno"
+              title={t.console.viewAgainTitle}
             >
-              <span>🎬 VER DE NUEVO</span>
+              <span>{t.console.viewAgain}</span>
             </button>
 
             <button
@@ -367,7 +370,7 @@ function DecisionConsole({
               }}
               onMouseEnter={soundHover}
             >
-              <span>CONTINUAR AL TURNO {mission.turn + 1}</span>
+              <span>{t.console.continueTurn(mission.turn + 1)}</span>
               <b>➔</b>
             </button>
           </div>
@@ -380,27 +383,27 @@ function DecisionConsole({
 // =========================================================================
 // PANTALLA DE INTRODUCCIÓN (BRIEFING)
 // =========================================================================
-function IntroScreen({ onStart, lang, setLang }) {
+function IntroScreen({ onStart, lang, setLang, t }) {
   const [soundActive, setSoundActive] = useState(isSoundEnabled);
-  const script = briefingScript[lang] ?? briefingScript.es;
 
   return (
     <main className="intro-screen">
       <div className="intro-backdrop" />
       <header className="topbar">
         <a className="brand" href="#top">
-          <span className="brand-mark">O7</span>
-          <span>ORBITA-7<small>BASE ALPHA-7 // ARCADIA PLANITIA</small></span>
+          <span className="brand-mark">{t.hud.brandBadge}</span>
+          <span>
+            {t.hud.brandName}
+            <small>{t.hud.baseLocation}</small>
+          </span>
         </a>
         <div className="topbar__controls">
+          <LanguageSelector currentLang={lang} onChangeLang={setLang} />
           <button
             className="icon-pill-button"
-            onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-            title="Cambiar idioma"
+            onClick={() => setSoundActive(toggleSound())}
+            title={t.hud.soundTitle}
           >
-            🌐 {lang.toUpperCase()}
-          </button>
-          <button className="icon-pill-button" onClick={() => setSoundActive(toggleSound())} title="Sonido">
             {soundActive ? '🔊' : '🔇'}
           </button>
         </div>
@@ -408,16 +411,20 @@ function IntroScreen({ onStart, lang, setLang }) {
 
       <section className="intro-hero" id="top">
         <div className="intro-copy">
-          <span className="eyebrow"><i /> MARTE, 2042 · BASE ALPHA-7</span>
-          <h1>72 HORAS<br />PARA SOBREVIVIR<br />EN MARTE</h1>
-          <p>
-            Tormenta planetaria en curso. Gestiona los 4 indicadores durante 6 turnos de 12 horas y guía la nave de suministros.
-          </p>
+          <span className="eyebrow"><i /> {t.briefing.eyebrow}</span>
+          <h1>
+            {t.briefing.headline.split('\n').map((line, idx) => (
+              <span key={idx} style={{ display: 'block' }}>
+                {line}
+              </span>
+            ))}
+          </h1>
+          <p>{t.briefing.description}</p>
 
           <div className="intro-meta">
-            <span><b>06</b> TURNOS</span>
-            <span><b>04</b> SISTEMAS</span>
-            <span><b>72</b> HORAS</span>
+            <span><b>{t.briefing.turnsCount}</b> {t.briefing.turnsLabel}</span>
+            <span><b>{t.briefing.systemsCount}</b> {t.briefing.systemsLabel}</span>
+            <span><b>{t.briefing.hoursCount}</b> {t.briefing.hoursLabel}</span>
           </div>
 
           <button
@@ -428,12 +435,12 @@ function IntroScreen({ onStart, lang, setLang }) {
             }}
             onMouseEnter={soundHover}
           >
-            {script.startButton} <span>➔</span>
+            {t.briefing.startButton} <span>➔</span>
           </button>
         </div>
 
         <div className="intro-art intro-art--menu">
-          <img src="/assets/orbita7_menu_inicio.png" alt="Menú inicial de ORBITA-7" />
+          <img src="/assets/orbita7_menu_inicio.png" alt="ORBITA-7" />
         </div>
       </section>
     </main>
@@ -445,8 +452,23 @@ function IntroScreen({ onStart, lang, setLang }) {
 // COMPONENTE PRINCIPAL (ORBITA-7)
 // =========================================================================
 export default function App() {
-  const [lang, setLang] = useState('es');
+  const [lang, setLang] = useState(getSavedLanguage);
   const [game, setGame] = useState(freshGame);
+
+  const handleSetLang = (newLang) => {
+    setLang(newLang);
+    saveLanguage(newLang);
+  };
+
+  const t = getLocale(lang);
+  const missions = t.missions;
+  const currentMeta = {
+    energy: { ...resourceMeta.en.energy, label: t.resources.energy.label },
+    life: { ...resourceMeta.en.life, label: t.resources.life.label },
+    supplies: { ...resourceMeta.en.supplies, label: t.resources.supplies.label },
+    safety: { ...resourceMeta.en.safety, label: t.resources.safety.label },
+  };
+  const mission = missions[game.turn] ?? missions[0];
 
   // Estado del sistema de cinemáticas
   // cutscene: null | { type: 'cause' | 'option' | 'replay', sequence: object, option?: object, isReplay?: boolean }
@@ -457,10 +479,6 @@ export default function App() {
   // Control de números flotantes y destello al cambiar recursos
   const [deltas, setDeltas] = useState({});
   const prevResourcesRef = useRef(game.resources);
-
-  const missions = missionsData[lang] ?? missionsData.es;
-  const currentMeta = resourceMeta[lang] ?? resourceMeta.es;
-  const mission = missions[game.turn] ?? missions[0];
 
   // Detecta cambios en los recursos para disparar números flotantes y destello
   useEffect(() => {
@@ -592,7 +610,7 @@ export default function App() {
   }
 
   if (game.phase === 'intro') {
-    return <IntroScreen onStart={handleStartGame} lang={lang} setLang={setLang} />;
+    return <IntroScreen onStart={handleStartGame} lang={lang} setLang={handleSetLang} t={t} />;
   }
 
   if (game.phase === 'result') {
@@ -602,6 +620,8 @@ export default function App() {
         missions={missions}
         onRestart={handleRestart}
         lang={lang}
+        onChangeLang={handleSetLang}
+        t={t}
       />
     );
   }
@@ -619,9 +639,10 @@ export default function App() {
         missions={missions}
         meta={currentMeta}
         lang={lang}
-        setLang={setLang}
+        setLang={handleSetLang}
         onRestart={handleRestart}
         deltas={deltas}
+        t={t}
       />
 
       {/* 2. Escenario / Cinemática de planos */}
@@ -630,6 +651,7 @@ export default function App() {
           sequence={cutscene.sequence}
           onComplete={handleCutsceneComplete}
           isReplay={cutscene.isReplay}
+          t={t}
         />
       ) : (
         <BaseAlpha7Viewport
@@ -637,6 +659,7 @@ export default function App() {
           isCleaned={isCleaned}
           mission={mission}
           onReplayCause={handleReplayCause}
+          t={t}
         />
       )}
 
@@ -652,6 +675,7 @@ export default function App() {
         onSelectOption={handleSelectOption}
         onReplayCutscene={handleReplayCutscene}
         onAdvance={handleAdvance}
+        t={t}
       />
     </div>
   );

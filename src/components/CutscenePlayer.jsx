@@ -10,15 +10,19 @@ import { playCutsceneSound, soundClick } from '../game/audio.js';
 // - Efectos de cámara: Paneo, Zoom, Temblor
 // - Sonidos Web Audio en cada plano
 // - Animaciones por cuadros (steps) y estilo pixel art
+// - Textos 100% traducidos mediante prop `t`
 // =========================================================================
 
-export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
+export function CutscenePlayer({ sequence, onComplete, isReplay = false, t }) {
   const shots = sequence.shots ?? [sequence];
   const [shotIndex, setShotIndex] = useState(0);
   const timerRef = useRef(null);
 
   const currentShot = shots[shotIndex] ?? shots[0];
   const totalShots = shots.length;
+
+  const cutscenesLocale = t?.cutscenes;
+  const macroUi = cutscenesLocale?.macroUi;
 
   // Manejador del avance automático de planos
   useEffect(() => {
@@ -52,16 +56,28 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
     onComplete();
   };
 
+  // Texto del subtítulo del plano traducido
+  const captionText =
+    cutscenesLocale?.captions?.[currentShot.id] ?? currentShot.text ?? '';
+
+  const shotTypeLabel =
+    cutscenesLocale?.shotTypes?.[currentShot.shotType] ??
+    currentShot.shotType.toUpperCase();
+
+  const tooltipText = cutscenesLocale?.timelineTooltip
+    ? cutscenesLocale.timelineTooltip(shotIndex + 1, totalShots)
+    : `Shot ${shotIndex + 1}/${totalShots}`;
+
   return (
     <div
       className={`pixel-cutscene-viewport ${currentShot.camera ?? 'cam-none'} shot-type--${currentShot.shotType}`}
-      aria-label={`Cinemática Plano ${shotIndex + 1} de ${totalShots}`}
+      aria-label={tooltipText}
     >
       {/* Fondo de escena del plano actual */}
       <img
         src={currentShot.sceneBg ?? '/assets/ORB_ESC_base_exterior_v01.jpg'}
         className="cutscene-bg-img"
-        alt="Fondo de cinemática"
+        alt=""
       />
 
       {/* Capa de atmósfera de tormenta marciana */}
@@ -91,7 +107,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
               <div className="macro-rover-arm">
                 <img
                   src="/assets/ORB_OBJ_rover_lateral_v01.png"
-                  alt="Rover detalle"
+                  alt=""
                   className="macro-rover-sprite"
                 />
                 <div className="macro-brush-spinner rotating-steps-3">
@@ -108,19 +124,21 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
               <div className="macro-helmet-view">
                 <img
                   src="/assets/ORB_PERS_tripulante_lider.webp"
-                  alt="Casco astronauta"
+                  alt=""
                   className="macro-helmet-sprite"
                 />
               </div>
               <div className="macro-o2-gauge">
                 <div className="gauge-header">
-                  <span>O₂ TRAJE EVA</span>
+                  <span>{macroUi?.suitO2 ?? 'EVA SUIT O₂'}</span>
                   <b className="gauge-o2-val">72%</b>
                 </div>
                 <div className="gauge-o2-bar-track">
                   <div className="gauge-o2-fill draining-steps" />
                 </div>
-                <span className="gauge-warning-tag">CONSUMO CRÍTICO</span>
+                <span className="gauge-warning-tag">
+                  {macroUi?.criticalDrain ?? 'CRITICAL DRAIN'}
+                </span>
               </div>
             </div>
           )}
@@ -130,19 +148,21 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             <div className="detail-switches-box">
               <div className="breaker-row">
                 <div className="breaker-switch switch-down-1">
-                  <span className="switch-label">MOD-2</span>
+                  <span className="switch-label">{macroUi?.mod2 ?? 'MOD-2'}</span>
                   <div className="lever-handle" />
                 </div>
                 <div className="breaker-switch switch-down-2">
-                  <span className="switch-label">LUCES</span>
+                  <span className="switch-label">{macroUi?.lights ?? 'LIGHTS'}</span>
                   <div className="lever-handle" />
                 </div>
                 <div className="breaker-switch switch-down-3">
-                  <span className="switch-label">AUX</span>
+                  <span className="switch-label">{macroUi?.aux ?? 'AUX'}</span>
                   <div className="lever-handle" />
                 </div>
               </div>
-              <span className="breaker-status-alert">MODO AHORRO ACTIVADO</span>
+              <span className="breaker-status-alert">
+                {macroUi?.powerSavingActive ?? 'POWER SAVING ENGAGED'}
+              </span>
             </div>
           )}
 
@@ -151,7 +171,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             <div className="detail-pipe-thaw-box">
               <img
                 src="/assets/ORB_OBJ_extractor_hielo_v01.png"
-                alt="Extractor detalle"
+                alt=""
                 className="macro-extractor-sprite"
               />
               <div className="steam-jets-anim" />
@@ -163,7 +183,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             <div className="detail-weld-patch-box">
               <img
                 src="/assets/ORB_OBJ_modulo_oxigeno_v01.png"
-                alt="Módulo de oxígeno"
+                alt=""
                 className="macro-o2module-sprite"
               />
               <div className="welding-sparks-anim" />
@@ -175,7 +195,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             <div className="detail-beacon-strobe-box">
               <img
                 src="/assets/ORB_OBJ_baliza_v01.png"
-                alt="Baliza de pista"
+                alt=""
                 className="macro-beacon-sprite"
               />
               <div className="xenon-strobe-flash" />
@@ -194,7 +214,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             >
               <img
                 src="/assets/ORB_OBJ_rover_lateral_v01.png"
-                alt="Rover en acción"
+                alt=""
                 className="rover-actor-img"
               />
               {currentShot.rover.state === 'sweeping_panels' && (
@@ -210,18 +230,18 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             >
               <img
                 src="/assets/ORB_PERS_tripulante_lider.webp"
-                alt="Líder EVA"
+                alt=""
                 className="crew-lead-sprite"
               />
               <img
                 src="/assets/ORB_PERS_tripulante_naranja.webp"
-                alt="Especialista EVA"
+                alt=""
                 className="crew-second-sprite"
               />
               {currentShot.crew.tools && (
                 <img
                   src="/assets/ORB_OBJ_kit_reparacion_v01.png"
-                  alt="Herramientas"
+                  alt=""
                   className="crew-tool-sprite"
                 />
               )}
@@ -232,7 +252,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
           <div className="medium-panels-target">
             <img
               src="/assets/ORB_OBJ_panel_solar_v01.png"
-              alt="Paneles solares"
+              alt=""
               className="medium-panel-img"
             />
             {currentShot.panelsCovered && (
@@ -273,7 +293,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
           <div className="general-solar-farm">
             <img
               src="/assets/ORB_OBJ_panel_solar_v01.png"
-              alt="Granja solar"
+              alt=""
               className="general-panel-sprite"
             />
             {currentShot.panelsCovered && <div className="general-dust-sheet" />}
@@ -287,7 +307,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             <div className={`general-rover-pos rover-${currentShot.rover.state}`}>
               <img
                 src="/assets/ORB_OBJ_rover_lateral_v01.png"
-                alt="Rover Base"
+                alt=""
                 className="general-rover-img"
               />
             </div>
@@ -298,12 +318,12 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             <div className={`general-crew-pos crew-${currentShot.crew.state}`}>
               <img
                 src="/assets/ORB_PERS_tripulante_lider.webp"
-                alt="Astronauta"
+                alt=""
                 className="general-crew-img"
               />
               <img
                 src="/assets/ORB_PERS_tripulante_naranja.webp"
-                alt="Astronauta"
+                alt=""
                 className="general-crew-img"
               />
             </div>
@@ -312,7 +332,9 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
           {/* Alerta de energía cayendo en CAUSA */}
           {currentShot.energyDrop && (
             <div className="general-energy-drop-hud">
-              <span className="hud-alert-tag">⚡ ENERGÍA CAYENDO</span>
+              <span className="hud-alert-tag">
+                {macroUi?.energyDropping ?? '⚡ ENERGY DROPPING'}
+              </span>
               <div className="energy-drain-mini-meter">
                 <div className="meter-bar-draining" />
               </div>
@@ -324,7 +346,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             <div className="general-orbit-ship-actor">
               <img
                 src="/assets/ORB_OBJ_nave_suministros_v01.png"
-                alt="Nave suministros"
+                alt=""
                 className="orbit-ship-sprite"
               />
             </div>
@@ -335,7 +357,7 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
             <div className="general-beacon-actor">
               <img
                 src="/assets/ORB_OBJ_baliza_v01.png"
-                alt="Baliza"
+                alt=""
                 className="beacon-obj-sprite"
               />
               <div className="vertical-sky-beam-anim" />
@@ -350,31 +372,33 @@ export function CutscenePlayer({ sequence, onComplete, isReplay = false }) {
 
       {/* 1. Botón SALTAR SIEMPRE VISIBLE en la esquina superior derecha */}
       <div className="cutscene-top-controls">
-        {isReplay && <span className="cutscene-replay-badge">🎬 REPETICIÓN</span>}
+        {isReplay && (
+          <span className="cutscene-replay-badge">
+            {cutscenesLocale?.replay ?? 'REPLAY'}
+          </span>
+        )}
         <button
           className="cutscene-skip-btn"
           onClick={handleSkip}
-          title="Saltar cinemática"
+          title={cutscenesLocale?.skipTitle ?? 'Skip'}
         >
-          <span>SALTAR</span>
+          <span>{cutscenesLocale?.skip ?? 'SKIP'}</span>
           <b>⏩</b>
         </button>
       </div>
 
       {/* 2. Barra de texto con subtítulo de máximo 5 palabras */}
-      {currentShot.text && (
+      {captionText && (
         <div className="cutscene-caption-bar">
           <div className="caption-pixel-box">
-            <span className="caption-type-badge">
-              {currentShot.shotType.toUpperCase()}
-            </span>
-            <b className="caption-text-content">{currentShot.text}</b>
+            <span className="caption-type-badge">{shotTypeLabel}</span>
+            <b className="caption-text-content">{captionText}</b>
           </div>
         </div>
       )}
 
       {/* 3. Indicador de progreso de planos (puntos de paso) */}
-      <div className="cutscene-timeline-dots" title={`Plano ${shotIndex + 1} de ${totalShots}`}>
+      <div className="cutscene-timeline-dots" title={tooltipText}>
         {shots.map((_, idx) => (
           <span
             key={idx}

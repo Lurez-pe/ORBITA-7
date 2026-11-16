@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { initialResources, resourceMeta } from '../data/missions.js';
+import { initialResources } from '../data/missions.js';
 import { soundClick, soundConfirm, soundHover, soundResultsEntrance } from '../game/audio.js';
 import { EndingIllustration } from './EndingIllustration.jsx';
+import { LanguageSelector } from './LanguageSelector.jsx';
 
 // =========================================================================
 // PANTALLA FINAL DE MISIÓN (RESULT SCREEN) - PIXEL ART RETRO
@@ -12,11 +13,11 @@ import { EndingIllustration } from './EndingIllustration.jsx';
 // 4. Estado de la misión (3 iconos: comunicaciones, aterrizaje, reparación con ✔ o ✘)
 // 5. Aprendizajes (Máximo 3 tarjetas de una sola frase de las decisiones tomadas)
 // 6. Botones grandes (JUGAR DE NUEVO y VER LAS OTRAS RUTAS)
+// 100% traducida mediante prop `t` sin textos escritos directamente
 // =========================================================================
 
-export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
+export function ResultScreen({ game, missions, onRestart, lang = 'en', onChangeLang, t }) {
   const [showRoutesModal, setShowRoutesModal] = useState(false);
-  const meta = resourceMeta[lang] ?? resourceMeta.es;
 
   // Sonido corto de entrada al montar la pantalla
   useEffect(() => {
@@ -24,44 +25,8 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
   }, []);
 
   const endingKey = game.result ?? 'finalA';
-
-  // Configuración de los 4 finales posibles
-  const endingMetaMap = {
-    finalA: {
-      letter: 'A',
-      tag: 'FINAL A · ÉXITO TOTAL',
-      title: 'Aterrizaje seguro',
-      stars: 3,
-      phrase: 'La nave aterrizó segura. Base Alpha-7 sobrevive con todos sus sistemas operativos.', // 12 palabras
-      color: 'gold',
-    },
-    finalB: {
-      letter: 'B',
-      tag: 'FINAL B · SUPERVIVENCIA LÍMITE',
-      title: 'Aterrizaje forzoso',
-      stars: 2,
-      phrase: 'Aterrizaje con daños menores. La tripulación sobrevive racionando suministros críticos.', // 10 palabras
-      color: 'yellow',
-    },
-    finalC: {
-      letter: 'C',
-      tag: 'FINAL C · MISIÓN INCOMPLETA',
-      title: 'Nave en órbita',
-      stars: 1,
-      phrase: 'Sin baliza ni enlace, la nave no descendió y espera en órbita.', // 11 palabras
-      color: 'cyan',
-    },
-    finalD: {
-      letter: 'D',
-      tag: 'FINAL D · COLAPSO DE SISTEMAS',
-      title: 'Evacuación de emergencia',
-      stars: 1,
-      phrase: 'Un sistema vital colapsó. Se activó el protocolo de emergencia de base.', // 11 palabras
-      color: 'red',
-    },
-  };
-
-  const currentEnding = endingMetaMap[endingKey] ?? endingMetaMap.finalA;
+  const currentEnding = t?.endings?.[endingKey] ?? t?.endings?.finalA;
+  const resultsLocale = t?.results;
 
   // -----------------------------------------------------------------------
   // SECCIÓN 3: CÁLCULO DE LA LÍNEA DE TIEMPO (6 MISIONES)
@@ -69,7 +34,6 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
   // -----------------------------------------------------------------------
   const history = game.history ?? [];
 
-  // Calcular balance neto de cada decisión en el historial
   let bestScore = -Infinity;
   let worstScore = Infinity;
   let bestMissionId = null;
@@ -92,7 +56,6 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
     });
   }
 
-  // Si todas tuvieron el mismo score, desempatar
   if (bestMissionId === worstMissionId && history.length > 1) {
     worstMissionId = null;
   }
@@ -106,52 +69,73 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
 
   // -----------------------------------------------------------------------
   // SECCIÓN 5: APRENDIZAJES (MÁXIMO 3 TARJETAS)
-  // - Extraídas de las decisiones tomadas por el jugador
+  // - Dinámicamente resueltas desde `missions` para actualizarse al instante al cambiar de idioma
   // -----------------------------------------------------------------------
   const playerLessons = [];
   const seenLessons = new Set();
 
+  function getOptionLesson(missionId, optionId) {
+    const m = missions.find((item) => item.id === missionId);
+    const opt = m?.options?.find((o) => o.id === optionId);
+    return opt?.lesson ?? '';
+  }
+
   // Priorizar la lección de la mejor decisión
   const bestItem = history.find((h) => h.missionId === bestMissionId);
-  if (bestItem?.lesson && !seenLessons.has(bestItem.lesson)) {
-    playerLessons.push({
-      title: `LECCIÓN · MISIÓN ${bestItem.missionId}`,
-      text: bestItem.lesson,
-      badge: 'MEJOR OPCIÓN',
-    });
-    seenLessons.add(bestItem.lesson);
+  if (bestItem) {
+    const lessonText = getOptionLesson(bestItem.missionId, bestItem.optionId);
+    if (lessonText && !seenLessons.has(lessonText)) {
+      playerLessons.push({
+        title: resultsLocale?.lessons?.titlePrefix
+          ? resultsLocale.lessons.titlePrefix(bestItem.missionId)
+          : `M${bestItem.missionId}`,
+        text: lessonText,
+        badge: resultsLocale?.lessons?.bestOption ?? 'BEST OPTION',
+      });
+      seenLessons.add(lessonText);
+    }
   }
 
   // Priorizar la lección de la decisión de mayor costo
   const worstItem = history.find((h) => h.missionId === worstMissionId);
-  if (worstItem?.lesson && !seenLessons.has(worstItem.lesson)) {
-    playerLessons.push({
-      title: `LECCIÓN · MISIÓN ${worstItem.missionId}`,
-      text: worstItem.lesson,
-      badge: 'MAYOR COSTO',
-    });
-    seenLessons.add(worstItem.lesson);
+  if (worstItem) {
+    const lessonText = getOptionLesson(worstItem.missionId, worstItem.optionId);
+    if (lessonText && !seenLessons.has(lessonText)) {
+      playerLessons.push({
+        title: resultsLocale?.lessons?.titlePrefix
+          ? resultsLocale.lessons.titlePrefix(worstItem.missionId)
+          : `M${worstItem.missionId}`,
+        text: lessonText,
+        badge: resultsLocale?.lessons?.highestCost ?? 'HIGHEST COST',
+      });
+      seenLessons.add(lessonText);
+    }
   }
 
-  // Completar hasta 3 lecciones con otras decisiones
+  // Completar hasta 3 lecciones con otras decisiones del jugador
   for (const item of history) {
     if (playerLessons.length >= 3) break;
-    if (item.lesson && !seenLessons.has(item.lesson)) {
+    const lessonText = getOptionLesson(item.missionId, item.optionId);
+    if (lessonText && !seenLessons.has(lessonText)) {
       playerLessons.push({
-        title: `LECCIÓN · MISIÓN ${item.missionId}`,
-        text: item.lesson,
-        badge: `OPCIÓN ${item.optionId}`,
+        title: resultsLocale?.lessons?.titlePrefix
+          ? resultsLocale.lessons.titlePrefix(item.missionId)
+          : `M${item.missionId}`,
+        text: lessonText,
+        badge: resultsLocale?.optionBadge
+          ? resultsLocale.optionBadge(item.optionId)
+          : `OPT ${item.optionId}`,
       });
-      seenLessons.add(item.lesson);
+      seenLessons.add(lessonText);
     }
   }
 
   // Fallback si no hubiese lecciones
   if (playerLessons.length === 0) {
     playerLessons.push({
-      title: 'LECCIÓN GENERAL',
-      text: 'Cada recurso en Marte exige sacrificios tácticos constantes.',
-      badge: 'PROTOCOLO',
+      title: resultsLocale?.lessons?.generalTitle ?? 'GENERAL LESSON',
+      text: resultsLocale?.lessons?.generalText ?? 'Every resource requires deliberate trade-offs.',
+      badge: resultsLocale?.lessons?.generalBadge ?? 'PROTOCOL',
     });
   }
 
@@ -162,32 +146,46 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
             1. CABECERA: TÍTULO GRANDE, ILUSTRACIÓN PIXEL ART, ESTRELLAS, FRASE
             ================================================================= */}
         <section className="result-section result-block-1 header-block">
+          {/* Selector de idioma y badges */}
           <div className="header-meta-row">
-            <span className={`ending-tag-badge tag--${currentEnding.color}`}>
-              {currentEnding.tag}
+            <span className={`ending-tag-badge tag--${currentEnding?.color ?? 'gold'}`}>
+              {currentEnding?.tag}
             </span>
+
             {/* 1 a 3 Estrellas según el resultado */}
-            <div className="ending-stars-row" title={`${currentEnding.stars} estrellas`}>
+            <div
+              className="ending-stars-row"
+              title={resultsLocale?.starsAria ? resultsLocale.starsAria(currentEnding?.stars ?? 3) : ''}
+            >
               {Array.from({ length: 3 }, (_, i) => (
                 <span
                   key={i}
-                  className={`star-pixel ${i < currentEnding.stars ? 'is-filled' : 'is-empty'}`}
+                  className={`star-pixel ${i < (currentEnding?.stars ?? 3) ? 'is-filled' : 'is-empty'}`}
                 >
                   ★
                 </span>
               ))}
             </div>
+
+            {/* Selector de idioma siempre visible */}
+            {onChangeLang && (
+              <LanguageSelector
+                currentLang={lang}
+                onChangeLang={onChangeLang}
+                className="result-lang-pill"
+              />
+            )}
           </div>
 
-          <h1 className="ending-main-title">{currentEnding.title}</h1>
+          <h1 className="ending-main-title">{currentEnding?.title}</h1>
 
           {/* Ilustración pixel art distinta para cada uno */}
           <div className="header-illustration-wrapper">
-            <EndingIllustration endingType={endingKey} />
+            <EndingIllustration endingType={endingKey} t={t} />
           </div>
 
           {/* Frase de máximo 12 palabras */}
-          <p className="ending-phrase-text">{currentEnding.phrase}</p>
+          <p className="ending-phrase-text">{currentEnding?.phrase}</p>
         </section>
 
         {/* =================================================================
@@ -195,13 +193,13 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
             ================================================================= */}
         <section className="result-section result-block-2">
           <div className="section-title-strip">
-            <span className="strip-num">02</span>
-            <b className="strip-label">SISTEMAS VITALES · BALANCE FINAL</b>
+            <span className="strip-num">{resultsLocale?.section02Num ?? '02'}</span>
+            <b className="strip-label">{resultsLocale?.section02Label ?? 'VITAL SYSTEMS'}</b>
           </div>
 
           <div className="result-indicators-row">
             {Object.entries(game.resources).map(([resKey, finalVal]) => {
-              const res = meta[resKey];
+              const res = t?.resources?.[resKey];
               const initVal = initialResources[resKey] ?? 80;
               const colorClass =
                 finalVal > 60 ? 'green' : finalVal >= 30 ? 'yellow' : 'red';
@@ -211,7 +209,9 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
               return (
                 <div key={resKey} className="res-indicator-card">
                   <div className="res-card-top">
-                    <span className="res-card-icon">{res?.icon}</span>
+                    <span className="res-card-icon">
+                      {resKey === 'energy' ? '⚡' : resKey === 'life' ? '🫁' : resKey === 'supplies' ? '💧' : '🛡️'}
+                    </span>
                     <span className="res-card-name">{res?.label}</span>
                   </div>
 
@@ -242,12 +242,12 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
             ================================================================= */}
         <section className="result-section result-block-3">
           <div className="section-title-strip">
-            <span className="strip-num">03</span>
-            <b className="strip-label">LÍNEA DE TIEMPO · 6 MISIONES</b>
+            <span className="strip-num">{resultsLocale?.section03Num ?? '03'}</span>
+            <b className="strip-label">{resultsLocale?.section03Label ?? 'MISSION TIMELINE'}</b>
           </div>
 
           <div className="timeline-table-grid">
-            {missions.map((mission, idx) => {
+            {missions.map((mission) => {
               const decision = history.find((h) => h.missionId === mission.id);
               const isBest = decision && decision.missionId === bestMissionId;
               const isWorst = decision && decision.missionId === worstMissionId;
@@ -275,7 +275,9 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
                   <div className="col-option-choice">
                     {decision ? (
                       <span className="option-choice-badge">
-                        OPC {decision.optionId}
+                        {resultsLocale?.optionBadge
+                          ? resultsLocale.optionBadge(decision.optionId)
+                          : `OPT ${decision.optionId}`}
                       </span>
                     ) : (
                       <span className="option-choice-badge not-played">---</span>
@@ -290,21 +292,28 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
                           key={k}
                           className={`effect-tag-pixel ${val >= 0 ? 'gain' : 'loss'}`}
                         >
-                          {meta[k]?.icon} {val > 0 ? `+${val}` : val}
+                          {k === 'energy' ? '⚡' : k === 'life' ? '🫁' : k === 'supplies' ? '💧' : '🛡️'}{' '}
+                          {val > 0 ? `+${val}` : val}
                         </span>
                       ))
                     ) : (
-                      <span className="no-change-tag">Sin datos</span>
+                      <span className="no-change-tag">
+                        {resultsLocale?.noData ?? 'No data'}
+                      </span>
                     )}
                   </div>
 
                   {/* Etiqueta de mejor o peor decisión */}
                   <div className="col-badge-eval">
                     {isBest && (
-                      <span className="eval-badge best">✔ MEJOR DECISIÓN</span>
+                      <span className="eval-badge best">
+                        {resultsLocale?.bestDecision ?? '✔ BEST DECISION'}
+                      </span>
                     )}
                     {isWorst && (
-                      <span className="eval-badge worst">✘ MAYOR COSTO</span>
+                      <span className="eval-badge worst">
+                        {resultsLocale?.costliestDecision ?? '✘ HIGHEST COST'}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -318,8 +327,8 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
             ================================================================= */}
         <section className="result-section result-block-4">
           <div className="section-title-strip">
-            <span className="strip-num">04</span>
-            <b className="strip-label">ESTADO DE LA BASE · HITOS CLAVE</b>
+            <span className="strip-num">{resultsLocale?.section04Num ?? '04'}</span>
+            <b className="strip-label">{resultsLocale?.section04Label ?? 'BASE STATUS'}</b>
           </div>
 
           <div className="mission-flags-grid">
@@ -329,9 +338,11 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
                 <span className="flag-icon">📡</span>
                 <span className="flag-status-symbol">{commsOk ? '✔' : '✘'}</span>
               </div>
-              <b className="flag-name">COMUNICACIONES</b>
+              <b className="flag-name">{resultsLocale?.flags?.comms?.title ?? 'COMMUNICATIONS'}</b>
               <span className="flag-desc">
-                {commsOk ? 'ENLACE ACTIVO' : 'SIN CONEXIÓN'}
+                {commsOk
+                  ? resultsLocale?.flags?.comms?.ok ?? 'UPLINK ACTIVE'
+                  : resultsLocale?.flags?.comms?.fail ?? 'NO SIGNAL'}
               </span>
             </div>
 
@@ -341,9 +352,11 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
                 <span className="flag-icon">🚨</span>
                 <span className="flag-status-symbol">{landingOk ? '✔' : '✘'}</span>
               </div>
-              <b className="flag-name">ZONA ATERRIZAJE</b>
+              <b className="flag-name">{resultsLocale?.flags?.landing?.title ?? 'LANDING ZONE'}</b>
               <span className="flag-desc">
-                {landingOk ? 'BALIZA GUIADA' : 'A OSCURAS'}
+                {landingOk
+                  ? resultsLocale?.flags?.landing?.ok ?? 'BEACON GUIDED'
+                  : resultsLocale?.flags?.landing?.fail ?? 'DARK RUNWAY'}
               </span>
             </div>
 
@@ -353,9 +366,11 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
                 <span className="flag-icon">🛠️</span>
                 <span className="flag-status-symbol">{repairedOk ? '✔' : '✘'}</span>
               </div>
-              <b className="flag-name">REPARACIÓN BASE</b>
+              <b className="flag-name">{resultsLocale?.flags?.repair?.title ?? 'BASE REPAIR'}</b>
               <span className="flag-desc">
-                {repairedOk ? 'MÓDULO SELLADO' : 'DAÑOS PENDIENTES'}
+                {repairedOk
+                  ? resultsLocale?.flags?.repair?.ok ?? 'MODULE SEALED'
+                  : resultsLocale?.flags?.repair?.fail ?? 'DAMAGE PENDING'}
               </span>
             </div>
           </div>
@@ -366,8 +381,8 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
             ================================================================= */}
         <section className="result-section result-block-5">
           <div className="section-title-strip">
-            <span className="strip-num">05</span>
-            <b className="strip-label">APRENDIZAJES CLAVE · DECISIONES TOMADAS</b>
+            <span className="strip-num">{resultsLocale?.section05Num ?? '05'}</span>
+            <b className="strip-label">{resultsLocale?.section05Label ?? 'KEY LEARNINGS'}</b>
           </div>
 
           <div className="lessons-cards-grid">
@@ -394,9 +409,9 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
               onRestart();
             }}
             onMouseEnter={soundHover}
-            title="Reiniciar simulación desde el inicio"
+            title={resultsLocale?.playAgainTitle ?? 'Restart'}
           >
-            <span>↻ JUGAR DE NUEVO</span>
+            <span>{resultsLocale?.playAgain ?? '↻ PLAY AGAIN'}</span>
           </button>
 
           <button
@@ -406,9 +421,9 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
               setShowRoutesModal(true);
             }}
             onMouseEnter={soundHover}
-            title="Consultar los 4 finales y sus requisitos"
+            title={resultsLocale?.viewRoutesTitle ?? 'View paths'}
           >
-            <span>🗺️ VER LAS OTRAS RUTAS</span>
+            <span>{resultsLocale?.viewRoutes ?? '🗺️ VIEW OTHER PATHS'}</span>
           </button>
         </section>
       </div>
@@ -422,17 +437,18 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
             className="pixel-modal-content"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
-            aria-label="Guía de rutas y finales"
+            aria-label={resultsLocale?.modal?.title ?? 'Routes guide'}
           >
             <div className="modal-header-row">
-              <span className="modal-badge">MANUAL S.T.A.R.</span>
-              <h2 className="modal-title">LOS 4 FINALES DE ORBITA-7</h2>
+              <span className="modal-badge">{resultsLocale?.modal?.badge ?? 'MANUAL S.T.A.R.'}</span>
+              <h2 className="modal-title">{resultsLocale?.modal?.title ?? 'THE 4 ENDINGS'}</h2>
               <button
                 className="pixel-btn-sm btn--danger"
                 onClick={() => {
                   soundClick();
                   setShowRoutesModal(false);
                 }}
+                title={resultsLocale?.modal?.close ?? 'Close'}
               >
                 ✖
               </button>
@@ -442,45 +458,37 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
               {/* Ruta A */}
               <div className="route-detail-card route--a">
                 <div className="route-card-top">
-                  <b className="route-name">FINAL A · ÉXITO TOTAL (★★★)</b>
-                  <span className="route-req-tag">REQUISITOS COMPLETOS</span>
+                  <b className="route-name">{resultsLocale?.modal?.routeA?.name}</b>
+                  <span className="route-req-tag">{resultsLocale?.modal?.routeA?.tag}</span>
                 </div>
-                <p className="route-text">
-                  Requiere activar Comunicaciones (✔), Baliza de aterrizaje (✔) y Reparación del hábitat (✔). La nave aterriza intacta y la colonia subsiste al 100%.
-                </p>
+                <p className="route-text">{resultsLocale?.modal?.routeA?.desc}</p>
               </div>
 
               {/* Ruta B */}
               <div className="route-detail-card route--b">
                 <div className="route-card-top">
-                  <b className="route-name">FINAL B · SUPERVIVENCIA LÍMITE (★★☆)</b>
-                  <span className="route-req-tag">ATERRIZAJE FORZOSO</span>
+                  <b className="route-name">{resultsLocale?.modal?.routeB?.name}</b>
+                  <span className="route-req-tag">{resultsLocale?.modal?.routeB?.tag}</span>
                 </div>
-                <p className="route-text">
-                  Requiere Comunicaciones (✔) y Baliza (✔), pero sin reparar la base (✘). La nave toca tierra con daños y se requiere racionamiento.
-                </p>
+                <p className="route-text">{resultsLocale?.modal?.routeB?.desc}</p>
               </div>
 
               {/* Ruta C */}
               <div className="route-detail-card route--c">
                 <div className="route-card-top">
-                  <b className="route-name">FINAL C · MISIÓN INCOMPLETA (★☆☆)</b>
-                  <span className="route-req-tag">NAVE EN ÓRBITA</span>
+                  <b className="route-name">{resultsLocale?.modal?.routeC?.name}</b>
+                  <span className="route-req-tag">{resultsLocale?.modal?.routeC?.tag}</span>
                 </div>
-                <p className="route-text">
-                  Si falta la Baliza de pista o el enlace de radio (✘). La nave no puede alinearse y permanece varada en órbita marciana.
-                </p>
+                <p className="route-text">{resultsLocale?.modal?.routeC?.desc}</p>
               </div>
 
               {/* Ruta D */}
               <div className="route-detail-card route--d">
                 <div className="route-card-top">
-                  <b className="route-name">FINAL D · COLAPSO CRÍTICO (☆☆☆)</b>
-                  <span className="route-req-tag">EVACUACIÓN</span>
+                  <b className="route-name">{resultsLocale?.modal?.routeD?.name}</b>
+                  <span className="route-req-tag">{resultsLocale?.modal?.routeD?.tag}</span>
                 </div>
-                <p className="route-text">
-                  Ocurre si cualquiera de los 4 indicadores (Energía, Soporte, Agua, Seguridad) cae a cero en cualquier turno. La misión se interrumpe de inmediato.
-                </p>
+                <p className="route-text">{resultsLocale?.modal?.routeD?.desc}</p>
               </div>
             </div>
 
@@ -492,7 +500,7 @@ export function ResultScreen({ game, missions, onRestart, lang = 'es' }) {
                   setShowRoutesModal(false);
                 }}
               >
-                <span>✖ CERRAR GUÍA</span>
+                <span>{resultsLocale?.modal?.close ?? '✖ CLOSE GUIDE'}</span>
               </button>
             </div>
           </div>
