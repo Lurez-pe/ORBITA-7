@@ -152,7 +152,7 @@ function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause, t 
   return (
     <section className="pixel-stage-wrapper" aria-label={t.hud.baseLocation}>
       <img
-        src={mission.sceneBg ?? '/assets/ORB_ESC_base_exterior_v01.jpg'}
+        src={mission.sceneBg ?? 'assets/ORB_ESC_base_exterior_v01.jpg'}
         className="pixel-stage-bg"
         alt=""
       />
@@ -195,7 +195,7 @@ function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause, t 
       <div className="pixel-panels-unit">
         <div className="pixel-panel-frame">
           <img
-            src="/assets/ORB_OBJ_panel_solar_v01.png"
+            src="assets/ORB_OBJ_panel_solar_v01.png"
             className="pixel-panel-img"
             alt=""
           />
@@ -203,7 +203,7 @@ function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause, t 
           {!isCleaned && (
             <div className="pixel-panel-alert">
               <img
-                src="/assets/orbita7_alerta_tormenta_de_polvo_v3.png"
+                src="assets/orbita7_alerta_tormenta_de_polvo_v3.png"
                 alt=""
                 title={t.stage.panelAlertTitle}
               />
@@ -216,7 +216,7 @@ function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause, t 
       {/* Rover autónomo */}
       <div className="pixel-rover-unit">
         <img
-          src="/assets/ORB_OBJ_rover_lateral_v01.png"
+          src="assets/ORB_OBJ_rover_lateral_v01.png"
           className="pixel-rover-img"
           alt=""
         />
@@ -227,12 +227,12 @@ function BaseAlpha7Viewport({ energy = 80, isCleaned, mission, onReplayCause, t 
       <div className="pixel-astronauts-unit">
         <div className="astronaut-sprites-row">
           <img
-            src="/assets/ORB_PERS_tripulante_lider.webp"
+            src="assets/ORB_PERS_tripulante_lider.webp"
             alt=""
             title={t.stage.crewCommanderTitle}
           />
           <img
-            src="/assets/ORB_PERS_tripulante_naranja.webp"
+            src="assets/ORB_PERS_tripulante_naranja.webp"
             alt=""
             title={t.stage.crewSpecialistTitle}
           />
@@ -454,7 +454,7 @@ function IntroScreen({ onStart, onWatchIntro, lang, setLang, t }) {
         </div>
 
         <div className="intro-art intro-art--menu">
-          <img src="/assets/orbita7_menu_inicio.png" alt="ORBITA-7" />
+          <img src="assets/orbita7_menu_inicio.png" alt="ORBITA-7" />
         </div>
       </section>
     </main>
@@ -722,3 +722,4 @@ export default function App() {
     </div>
   );
 }
+
