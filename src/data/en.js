@@ -15,6 +15,57 @@ export const en = {
     hoursCount: '72',
     hoursLabel: 'HOURS',
     startButton: 'START MISSION',
+    watchIntroButton: '🎬 WATCH INTRO',
+  },
+
+  // 1.1 Cinematic Intro (5 scenes, max 10 words per phrase, typewriter effect)
+  cinematicIntro: {
+    starTag: 'S.T.A.R. // BRIEFING DIRECTIVE',
+    skip: 'SKIP',
+    skipTitle: 'Skip introduction',
+    startMission: 'START MISSION',
+    watchIntro: 'WATCH INTRO',
+    watchIntroTitle: 'Watch 5-scene cinematic briefing',
+    backToMenu: 'BACK TO MENU',
+    replayIntro: 'REPLAY INTRO',
+    sceneProgress: (current, total) => `Scene ${current} of ${total}`,
+    scenes: [
+      {
+        id: 1,
+        title: 'BASE ALPHA-7',
+        text: 'Mars, 2042. Base Alpha-7. Four crew members.',
+        sub: 'Arcadia Planitia outpost',
+        sound: 'wind',
+      },
+      {
+        id: 2,
+        title: 'PLANETARY STORM',
+        text: 'A planet-wide dust storm blocks the sun.',
+        sub: 'Solar generation critical',
+        sound: 'wind',
+      },
+      {
+        id: 3,
+        title: 'SYSTEMS FAILURE',
+        text: 'Power is dropping. Communications are unstable.',
+        sub: 'Telemetry intermittent',
+        sound: 'soft_alarm',
+      },
+      {
+        id: 4,
+        title: 'DIRECTOR ASSIGNED',
+        text: 'You are the Operations Director.',
+        sub: 'Command authorization granted',
+        sound: 'click',
+      },
+      {
+        id: 5,
+        title: 'CARGO VESSEL IN ORBIT',
+        text: 'Keep crew safe for 72 hours until landing.',
+        sub: 'Resupply ship approaching',
+        sound: 'beacon',
+      },
+    ],
   },
 
   // 2. HUD and Common Controls

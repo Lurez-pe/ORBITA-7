@@ -3,8 +3,31 @@
 
 let audioCtx = null;
 let soundEnabled = true;
+let userHasInteracted = false;
+
+export function markUserInteracted() {
+  userHasInteracted = true;
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(() => {});
+  }
+}
+
+export function hasUserInteracted() {
+  return userHasInteracted;
+}
+
+if (typeof window !== 'undefined') {
+  const unlockAudio = () => {
+    markUserInteracted();
+    window.removeEventListener('pointerdown', unlockAudio);
+    window.removeEventListener('keydown', unlockAudio);
+  };
+  window.addEventListener('pointerdown', unlockAudio, { passive: true });
+  window.addEventListener('keydown', unlockAudio, { passive: true });
+}
 
 function getAudioContext() {
+  if (!userHasInteracted) return null;
   if (!audioCtx) {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (AudioContextClass) {
@@ -12,7 +35,7 @@ function getAudioContext() {
     }
   }
   if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
+    audioCtx.resume().catch(() => {});
   }
   return audioCtx;
 }
@@ -158,6 +181,76 @@ export function soundAlert() {
   } catch {
     // Ignore audio context errors
   }
+}
+
+// Alarma suave para briefing cinemático (Web Audio API)
+export function soundSoftAlarm() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    [520, 440].forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.16);
+      gain.gain.setValueAtTime(0.04, now + idx * 0.16);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.16 + 0.14);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + idx * 0.16);
+      osc.stop(now + idx * 0.16 + 0.14);
+    });
+  } catch {}
+}
+
+// Viento marciano suave (Web Audio API)
+export function soundWind() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const noise = ctx.createBufferSource();
+    noise.buffer = getNoiseBuffer(ctx, 2.0);
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(220, now);
+    filter.frequency.linearRampToValueAtTime(380, now + 1.0);
+    filter.frequency.linearRampToValueAtTime(180, now + 2.0);
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.01, now);
+    gain.gain.linearRampToValueAtTime(0.05, now + 0.6);
+    gain.gain.linearRampToValueAtTime(0.001, now + 2.0);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + 2.0);
+  } catch {}
+}
+
+// Clic de teletipo / máquina de escribir para subtítulos de S.T.A.R.
+export function soundTypewriter() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200 + Math.random() * 200, now);
+    gain.gain.setValueAtTime(0.015, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.02);
+  } catch {}
 }
 
 export function soundWellbeing() {

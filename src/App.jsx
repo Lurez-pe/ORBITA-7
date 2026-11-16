@@ -29,6 +29,7 @@ import { CutscenePlayer } from './components/CutscenePlayer.jsx';
 import { ActionPictogram } from './components/ActionPictogram.jsx';
 import { ResultScreen } from './components/ResultScreen.jsx';
 import { LanguageSelector } from './components/LanguageSelector.jsx';
+import { CinematicIntro } from './components/CinematicIntro.jsx';
 import { getLocale, getSavedLanguage, saveLanguage } from './data/i18n.js';
 
 // =========================================================================
@@ -383,7 +384,7 @@ function DecisionConsole({
 // =========================================================================
 // PANTALLA DE INTRODUCCIÓN (BRIEFING)
 // =========================================================================
-function IntroScreen({ onStart, lang, setLang, t }) {
+function IntroScreen({ onStart, onWatchIntro, lang, setLang, t }) {
   const [soundActive, setSoundActive] = useState(isSoundEnabled);
 
   return (
@@ -427,16 +428,29 @@ function IntroScreen({ onStart, lang, setLang, t }) {
             <span><b>{t.briefing.hoursCount}</b> {t.briefing.hoursLabel}</span>
           </div>
 
-          <button
-            className="primary-button"
-            onClick={() => {
-              soundConfirm();
-              onStart();
-            }}
-            onMouseEnter={soundHover}
-          >
-            {t.briefing.startButton} <span>➔</span>
-          </button>
+          <div className="intro-actions-row">
+            <button
+              className="primary-button"
+              onClick={() => {
+                soundConfirm();
+                onStart();
+              }}
+              onMouseEnter={soundHover}
+            >
+              {t.briefing.startButton} <span>➔</span>
+            </button>
+            <button
+              className="secondary-pixel-btn"
+              onClick={() => {
+                soundClick();
+                onWatchIntro();
+              }}
+              onMouseEnter={soundHover}
+              title={t.cinematicIntro.watchIntroTitle}
+            >
+              {t.briefing.watchIntroButton}
+            </button>
+          </div>
         </div>
 
         <div className="intro-art intro-art--menu">
@@ -454,6 +468,7 @@ function IntroScreen({ onStart, lang, setLang, t }) {
 export default function App() {
   const [lang, setLang] = useState(getSavedLanguage);
   const [game, setGame] = useState(freshGame);
+  const [showCinematicIntro, setShowCinematicIntro] = useState(false);
 
   const handleSetLang = (newLang) => {
     setLang(newLang);
@@ -500,8 +515,9 @@ export default function App() {
     }
   }, [game.resources]);
 
-  // Inicia la partida desde el Briefing
-  function handleStartGame() {
+  // Inicia la partida real desde la cinemática o briefing
+  function handleStartMissionDirectly() {
+    setShowCinematicIntro(false);
     setGame(startGame());
     setSelectedOptionId(null);
     setLastOptionCutscene(null);
@@ -516,12 +532,18 @@ export default function App() {
     }
   }
 
+  // Pulsar "INICIAR MISIÓN" o "VER INTRO" en la pantalla de inicio
+  function handleTriggerCinematicIntro() {
+    setShowCinematicIntro(true);
+  }
+
   // Reiniciar juego
   function handleRestart() {
     setGame(freshGame());
     setCutscene(null);
     setSelectedOptionId(null);
     setLastOptionCutscene(null);
+    setShowCinematicIntro(false);
   }
 
   // Jugador elige una opción (A, B o C)
@@ -609,8 +631,28 @@ export default function App() {
     }
   }
 
+  if (showCinematicIntro) {
+    return (
+      <CinematicIntro
+        t={t}
+        lang={lang}
+        onChangeLang={handleSetLang}
+        onStartMission={handleStartMissionDirectly}
+        onBackToMenu={() => setShowCinematicIntro(false)}
+      />
+    );
+  }
+
   if (game.phase === 'intro') {
-    return <IntroScreen onStart={handleStartGame} lang={lang} setLang={handleSetLang} t={t} />;
+    return (
+      <IntroScreen
+        onStart={handleTriggerCinematicIntro}
+        onWatchIntro={handleTriggerCinematicIntro}
+        lang={lang}
+        setLang={handleSetLang}
+        t={t}
+      />
+    );
   }
 
   if (game.phase === 'result') {

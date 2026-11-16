@@ -14,7 +14,58 @@ export const es = {
     systemsLabel: 'SISTEMAS',
     hoursCount: '72',
     hoursLabel: 'HORAS',
-    startButton: 'INICIAR SIMULACIÓN',
+    startButton: 'INICIAR MISIÓN',
+    watchIntroButton: '🎬 VER INTRO',
+  },
+
+  // 1.1 Introducción Cinemática (5 escenas, máx 10 palabras por frase, máquina de escribir)
+  cinematicIntro: {
+    starTag: 'S.T.A.R. // DIRECTIVA DE BRIEFING',
+    skip: 'SALTAR',
+    skipTitle: 'Saltar introducción',
+    startMission: 'INICIAR MISIÓN',
+    watchIntro: 'VER INTRODUCCIÓN',
+    watchIntroTitle: 'Ver briefing cinemático de 5 escenas',
+    backToMenu: 'VOLVER AL MENÚ',
+    replayIntro: 'REPETIR INTRO',
+    sceneProgress: (current, total) => `Escena ${current} de ${total}`,
+    scenes: [
+      {
+        id: 1,
+        title: 'BASE ALPHA-7',
+        text: 'Marte, 2042. Base Alpha-7. Cuatro tripulantes.',
+        sub: 'Puesto avanzado Arcadia Planitia',
+        sound: 'wind',
+      },
+      {
+        id: 2,
+        title: 'TORMENTA PLANETARIA',
+        text: 'Una tormenta planetaria de polvo bloquea el sol.',
+        sub: 'Generación solar crítica',
+        sound: 'wind',
+      },
+      {
+        id: 3,
+        title: 'FALLO DE SISTEMAS',
+        text: 'La energía cae. Las comunicaciones son inestables.',
+        sub: 'Telemetría intermitente',
+        sound: 'soft_alarm',
+      },
+      {
+        id: 4,
+        title: 'DIRECTOR ASIGNADO',
+        text: 'Eres el Director de Operaciones.',
+        sub: 'Mando operativo autorizado',
+        sound: 'click',
+      },
+      {
+        id: 5,
+        title: 'NAVE EN ÓRBITA',
+        text: 'Protege a la tripulación 72 horas hasta aterrizar.',
+        sub: 'Nave de carga en aproximación',
+        sound: 'beacon',
+      },
+    ],
   },
 
   // 2. HUD y controles comunes
