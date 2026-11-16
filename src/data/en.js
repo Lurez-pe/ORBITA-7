@@ -146,12 +146,12 @@ export const en = {
       time: 'HOUR 00/72',
       title: 'Dust on solar panels',
       alert: 'Active storm. Dust covers panels and electric power drops critically.',
-      sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+      sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
       options: [
         {
           id: 'A',
           title: 'Clean with rover',
-          thumb: '/assets/ORB_OBJ_rover_lateral_v01.png',
+          thumb: 'assets/ORB_OBJ_rover_lateral_v01.png',
           effects: { energy: -8 },
           flag: 'var_paneles_limpios',
           flagValue: 1,
@@ -161,7 +161,7 @@ export const en = {
         {
           id: 'B',
           title: 'Crew EVA sortie',
-          thumb: '/assets/ORB_PERS_tripulante_naranja.webp',
+          thumb: 'assets/ORB_PERS_tripulante_naranja.webp',
           effects: { life: -8, safety: -10 },
           flag: 'var_paneles_limpios',
           flagValue: 1,
@@ -171,7 +171,7 @@ export const en = {
         {
           id: 'C',
           title: 'Power saving mode',
-          thumb: '/assets/ORB_UI_icono_energia_v01.jpg',
+          thumb: 'assets/ORB_UI_icono_energia_v01.jpg',
           effects: { energy: 5, safety: -5 },
           flag: 'var_modo_ahorro',
           flagValue: 1,
@@ -186,12 +186,12 @@ export const en = {
       time: 'HOUR 12/72',
       title: 'Ice extractor failure',
       alert: 'Frozen conduit. Water flow halted and reserves at risk.',
-      sceneBg: '/assets/ORB_ESC_invernadero_v01.webp',
+      sceneBg: 'assets/ORB_ESC_invernadero_v01.webp',
       options: [
         {
           id: 'A',
           title: 'Heat the pipe',
-          thumb: '/assets/ORB_OBJ_extractor_hielo_v01.png',
+          thumb: 'assets/ORB_OBJ_extractor_hielo_v01.png',
           effects: { energy: -12, supplies: 12 },
           flag: 'extractorRepaired',
           outcome: 'Pipe thawed by heaters.',
@@ -200,7 +200,7 @@ export const en = {
         {
           id: 'B',
           title: 'Recycle existing water',
-          thumb: '/assets/ORB_UI_soporte_vital.webp',
+          thumb: 'assets/ORB_UI_soporte_vital.webp',
           effects: { energy: 4, supplies: -5 },
           flag: 'recyclingActive',
           outcome: 'Water recycling active.',
@@ -209,7 +209,7 @@ export const en = {
         {
           id: 'C',
           title: 'Insulate pipe manually',
-          thumb: '/assets/ORB_OBJ_kit_reparacion_v01.png',
+          thumb: 'assets/ORB_OBJ_kit_reparacion_v01.png',
           effects: { supplies: 4, safety: -4 },
           flag: 'waterRationed',
           outcome: 'Manual insulation applied.',
@@ -223,12 +223,12 @@ export const en = {
       time: 'HOUR 24/72',
       title: 'Solar radiation alert',
       alert: 'Solar storm detected. Surface radiation levels rising dangerously.',
-      sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+      sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
       options: [
         {
           id: 'A',
           title: 'Evacuate to shelter',
-          thumb: '/assets/ORB_ESC_refugio_v01.webp',
+          thumb: 'assets/ORB_ESC_refugio_v01.webp',
           effects: { life: 8, safety: -6 },
           flag: 'shelterActive',
           outcome: 'Crew secured underground.',
@@ -237,7 +237,7 @@ export const en = {
         {
           id: 'B',
           title: 'Add regolith shielding',
-          thumb: '/assets/ORB_UI_proteccion.webp',
+          thumb: 'assets/ORB_UI_proteccion.webp',
           effects: { energy: -8, safety: 8 },
           flag: 'regolithShield',
           outcome: 'Extra regolith piled on dome.',
@@ -246,7 +246,7 @@ export const en = {
         {
           id: 'C',
           title: 'Continue with monitoring',
-          thumb: '/assets/orbita7_alerta_radiacion.png',
+          thumb: 'assets/orbita7_alerta_radiacion.png',
           effects: { energy: 4, life: -10 },
           flag: 'monitoringOnly',
           outcome: 'Active surface monitoring.',
@@ -260,12 +260,12 @@ export const en = {
       time: 'HOUR 36/72',
       title: 'Oxygen line leak',
       alert: 'Main conduit breach. Habitat oxygen pressure dropping rapidly.',
-      sceneBg: '/assets/ORB_ESC_sala_control_v01.webp',
+      sceneBg: 'assets/ORB_ESC_sala_control_v01.webp',
       options: [
         {
           id: 'A',
           title: 'Seal exterior breach',
-          thumb: '/assets/ORB_OBJ_modulo_oxigeno_v01.png',
+          thumb: 'assets/ORB_OBJ_modulo_oxigeno_v01.png',
           effects: { energy: -6, life: 10 },
           flag: 'var_reparacion_base',
           flagValue: 1,
@@ -275,7 +275,7 @@ export const en = {
         {
           id: 'B',
           title: 'Lower habitat pressure',
-          thumb: '/assets/ORB_UI_soporte_vital.webp',
+          thumb: 'assets/ORB_UI_soporte_vital.webp',
           effects: { energy: 4, safety: -6 },
           flag: 'pressureLowered',
           outcome: 'Internal pressure reduced.',
@@ -284,7 +284,7 @@ export const en = {
         {
           id: 'C',
           title: 'Engage backup tanks',
-          thumb: '/assets/ORB_OBJ_kit_reparacion_v01.png',
+          thumb: 'assets/ORB_OBJ_kit_reparacion_v01.png',
           effects: { supplies: -6, life: 6 },
           flag: 'auxO2Active',
           outcome: 'Backup tanks online.',
@@ -298,12 +298,12 @@ export const en = {
       time: 'HOUR 48/72',
       title: 'Shelter bulkhead crack',
       alert: 'Structural fissure detected. Risk of habitat decompression.',
-      sceneBg: '/assets/ORB_ESC_refugio_v01.webp',
+      sceneBg: 'assets/ORB_ESC_refugio_v01.webp',
       options: [
         {
           id: 'A',
           title: 'Rapid epoxy seal',
-          thumb: '/assets/ORB_OBJ_kit_reparacion_v01.png',
+          thumb: 'assets/ORB_OBJ_kit_reparacion_v01.png',
           effects: { supplies: -8, safety: 10 },
           flag: 'epoxySeal',
           outcome: 'Fissure sealed with resin.',
@@ -312,7 +312,7 @@ export const en = {
         {
           id: 'B',
           title: 'Isolate damaged sector',
-          thumb: '/assets/ORB_ESC_refugio_v01.webp',
+          thumb: 'assets/ORB_ESC_refugio_v01.webp',
           effects: { life: -6, safety: 6 },
           flag: 'bulkheadIsolated',
           outcome: 'Bulkhead doors sealed.',
@@ -321,7 +321,7 @@ export const en = {
         {
           id: 'C',
           title: 'Weld steel plates',
-          thumb: '/assets/ORB_OBJ_modulo_oxigeno_v01.png',
+          thumb: 'assets/ORB_OBJ_modulo_oxigeno_v01.png',
           effects: { energy: -8, safety: 8 },
           flag: 'plateBracing',
           outcome: 'Metal armor plates welded.',
@@ -335,12 +335,12 @@ export const en = {
       time: 'HOUR 60/72',
       title: 'Supply vessel guidance',
       alert: 'Inbound cargo ship approaching. Active guidance required to land.',
-      sceneBg: '/assets/ORB_ESC_base_exterior_v01.jpg',
+      sceneBg: 'assets/ORB_ESC_base_exterior_v01.jpg',
       options: [
         {
           id: 'A',
           title: 'Guide via radio',
-          thumb: '/assets/ORB_PERS_tripulante_antena.webp',
+          thumb: 'assets/ORB_PERS_tripulante_antena.webp',
           effects: { energy: -10 },
           flag: 'var_comunicaciones',
           flagValue: 1,
@@ -350,7 +350,7 @@ export const en = {
         {
           id: 'B',
           title: 'Ignite visual beacon',
-          thumb: '/assets/ORB_OBJ_baliza_v01.png',
+          thumb: 'assets/ORB_OBJ_baliza_v01.png',
           effects: { energy: -8, safety: 8 },
           flag: 'var_zona_aterrizaje',
           flagValue: 1,
@@ -360,7 +360,7 @@ export const en = {
         {
           id: 'C',
           title: 'Dual guidance system',
-          thumb: '/assets/ORB_MAP_alpha7.webp',
+          thumb: 'assets/ORB_MAP_alpha7.webp',
           effects: { energy: -16, safety: 10 },
           flag: 'dualGuidance',
           flagValue: 1,
@@ -603,3 +603,4 @@ export const en = {
     m6C: 'Dual coordinated guidance console',
   },
 };
+
