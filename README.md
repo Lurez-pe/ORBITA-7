@@ -1,5 +1,7 @@
 # ORBITA-7 Web
 
+[![Deploy ORBITA-7 to GitHub Pages](https://github.com/Lurez-pe/ORBITA-7/actions/workflows/deploy.yml/badge.svg)](https://github.com/Lurez-pe/ORBITA-7/actions/workflows/deploy.yml)
+
 Primera versión web interactiva de **ORBITA-7: 72 horas para sobrevivir en Marte**. La experiencia conserva las seis misiones y el ciclo de decisiones del GDD; React gestiona las pantallas y el estado, CSS la presentación y JavaScript las reglas.
 
 ## Desarrollo local
